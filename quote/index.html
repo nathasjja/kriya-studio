@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>KRIYĀ · Your quote</title>
+<meta name="theme-color" content="#12130E">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="KRIYĀ">
+<link rel="icon" href="../icon.png"><link rel="apple-touch-icon" href="../icon.png">
+<meta name="robots" content="noindex, nofollow">
+<script src="../config.js"></script>
+<script src="../kriya.js"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=DM+Mono:wght@400;500&display=swap">
+<style>
+:root{--ink:#12130E;--lime:#DCFF3E;--moss:#2F3B12;--paper:#F3F0E8;
+--bg:#12130E;--card:#1C1D17;--line:#3A3C31;--text:#F3F0E8;--muted:#A6A79A;--faint:#8C8E80;--on-bg:#DCFF3E;--on-fg:#12130E;--btn-bg:#DCFF3E;--btn-fg:#12130E;--focus:#DCFF3E;--price-bg:#1C1D17}
+html[data-theme=light]{--bg:#F3F0E8;--card:#FAF8F2;--line:rgba(18,19,14,.22);--text:#12130E;--muted:#55574C;--faint:#6E7064;--on-bg:#12130E;--on-fg:#DCFF3E;--btn-bg:#12130E;--btn-fg:#DCFF3E;--focus:#12130E;--price-bg:#12130E}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:'Bricolage Grotesque',system-ui,sans-serif;font-size:16px;line-height:1.45}
+button,input,textarea{font:inherit;color:inherit}
+a{color:inherit}
+.hero{background:var(--lime);color:var(--ink)}
+.hero .in{max-width:560px;margin:0 auto;padding:24px 16px 30px}
+.top{display:flex;justify-content:space-between;align-items:center}
+.word{font-weight:800;font-stretch:75%;font-size:30px;line-height:1;display:flex;align-items:baseline;gap:10px}
+.word small{font:400 12px 'DM Mono',monospace}
+.themebtn{width:44px;height:44px;border-radius:10px;border:1.5px solid var(--ink);background:transparent;color:var(--ink);display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0}
+h1{font-size:clamp(52px,17vw,68px);font-weight:800;font-stretch:75%;text-transform:uppercase;line-height:.88;letter-spacing:-.01em;margin:26px 0 12px}
+h2{font-size:30px;font-weight:800;font-stretch:75%;text-transform:uppercase;line-height:.95;margin:6px 0 10px}
+.whisper{font:400 13px 'DM Mono',monospace;text-transform:lowercase;margin:0}
+.wrap{max-width:560px;margin:0 auto;padding:22px 16px 64px;display:flex;flex-direction:column;gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+.k{font:400 12px 'DM Mono',monospace;color:var(--muted)}
+.price{background:var(--price-bg);border:1px solid var(--line);border-radius:14px;padding:18px 16px;display:flex;flex-direction:column;gap:8px;color:#F3F0E8}
+.price .k{color:var(--lime)}
+.price .v{font:500 38px/1 'DM Mono',monospace;color:var(--lime)}
+.price .s{font:400 13px 'DM Mono',monospace;color:#B9BAAD}
+.calm{background:var(--moss);color:var(--paper);border-radius:14px;padding:18px 16px;display:flex;flex-direction:column;gap:8px}
+.calm .k{color:var(--lime)}
+.calm .big{font-weight:800;font-stretch:75%;font-size:34px;line-height:.95;text-transform:uppercase;color:var(--lime)}
+.calm .mono{color:#C9CDB7}
+dl{margin:0}
+dl div{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+dt{color:var(--muted)}dd{margin:0;font-family:'DM Mono',monospace;text-align:right}
+.note{font:400 12px/1.55 'DM Mono',monospace;color:var(--muted);margin:0}
+.btn{width:100%;min-height:58px;border-radius:12px;border:0;background:var(--btn-bg);color:var(--btn-fg);font-weight:800;font-stretch:75%;font-size:24px;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;text-decoration:none}
+.btn.ghost{background:transparent;border:1.5px solid var(--text);color:var(--text);font-weight:600;font-stretch:100%;font-size:16px;text-transform:none;min-height:52px}
+.btn.calmbtn{background:transparent;border:1.5px solid var(--lime);color:var(--lime);font:400 13px 'DM Mono',monospace;text-transform:none;min-height:48px}
+.btn:disabled{opacity:.6}
+.link{background:none;border:0;color:var(--text);font:400 13px 'DM Mono',monospace;text-decoration:underline;min-height:44px;cursor:pointer}
+label.l{display:block;font:400 12px 'DM Mono',monospace;color:var(--muted);margin:4px 0 6px}
+.input{width:100%;min-height:52px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--text);padding:12px 14px;font-size:16px;outline:none}
+.input.big{font:500 20px 'DM Mono',monospace}
+.input:focus{border-color:var(--focus);box-shadow:0 0 0 1px var(--focus)}
+.input::placeholder{color:var(--faint)}
+textarea.input{min-height:84px;resize:vertical}
+html[data-theme=dark] input[type=date]{color-scheme:dark}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chips button{min-height:44px;padding:0 16px;border-radius:22px;border:1px solid var(--line);background:var(--card);color:var(--text);font:400 14px 'DM Mono',monospace;cursor:pointer}
+.chips button[aria-pressed=true]{background:var(--on-bg);color:var(--on-fg);border-color:var(--on-bg)}
+.err{background:var(--lime);color:var(--ink);border:2px solid var(--ink);border-radius:12px;padding:12px 14px;font-weight:600}
+.spin{width:18px;height:18px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:s .8s linear infinite;display:inline-block}
+@keyframes s{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<header class="hero"><div class="in">
+  <div class="top"><div class="word">KRIYĀ<small>tattoo · bali</small></div><button class="themebtn" id="themeBtn" type="button" aria-label="Switch to light mode"></button></div>
+  <h1>Your quote.</h1>
+  <p class="whisper" id="sub"></p>
+</div></header>
+<main class="wrap" id="app"></main>
+<script type="text/plain" id="kriya-main">
+let Q = window.__BOOT;
+const V = { view: 'quote', when: '', busy: false };
+const SUN = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>';
+const MOON = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>';
+function ls(k, v) { try { if (v === undefined) return localStorage.getItem(k) || ''; localStorage.setItem(k, v); } catch (e) { return ''; } }
+function theme(t) {
+  t = t || ls('kriya_public_theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', t);
+  const b = document.getElementById('themeBtn'); b.innerHTML = t === 'dark' ? SUN : MOON; b.setAttribute('aria-label', t === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
+}
+theme();
+document.getElementById('themeBtn').onclick = () => { const t = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'; ls('kriya_public_theme', t); theme(t); };
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+function rp(n) { return 'Rp' + String(Math.round(n || 0)).replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
+function hrs(h) { const f = x => x < 1 ? Math.round(x * 60) + ' min' : (x % 1 ? x.toFixed(1) : x.toFixed(0)) + (x === 1 ? ' hour' : ' hours'); return Array.isArray(h) ? f(h[0]).replace(/ hours?$/, '') + '–' + f(h[1]) : f(h); }
+function nice(s) { const m = String(s || '').match(/^(\d{4})-(\d{2})-(\d{2})/); if (!m) return s || ''; return new Date(+m[1], +m[2] - 1, +m[3]).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }); }
+function contact() {
+  const wa = Q.whatsapp ? '<a class="btn calmbtn" target="_blank" rel="noopener" href="https://wa.me/' + Q.whatsapp + '?text=' + encodeURIComponent('Hi KRIYĀ! About my quote ' + Q.id + ': ') + '">Message us on WhatsApp</a>' : '';
+  const ig = Q.instagram ? '<a class="btn calmbtn" target="_blank" rel="noopener" href="https://instagram.com/' + encodeURIComponent(Q.instagram) + '">@' + esc(Q.instagram) + ' on Instagram</a>' : '';
+  return wa + ig;
+}
+function render() {
+  const app = document.getElementById('app'), sub = document.getElementById('sub');
+  if (!Q || !Q.ok) { sub.textContent = ''; app.innerHTML = '<div class="calm"><span class="k">quote</span><p style="margin:0">' + esc((Q && Q.error) || 'This quote could not be loaded.') + '</p></div>'; return; }
+  sub.textContent = String(Q.id).toLowerCase() + ' · for ' + String(Q.first).toLowerCase() + (Q.validUntil && /Sent|Offer/.test(Q.status) ? ' · open until ' + nice(Q.validUntil).toLowerCase() : '');
+  const piece = '<section class="card"><span class="k">your piece</span><span style="font-weight:700;font-size:18px;line-height:1.25">' + esc(Q.piece) + '</span>' +
+    '<span class="k">' + esc([Q.placement && String(Q.placement).replace(/\s*\(tricky\)$/, '').toLowerCase(), Q.len ? 'about ' + Q.len + ' cm' + (Q.pieces > 1 ? ' × ' + Q.pieces : '') : '', String(Q.detail || '').toLowerCase()].filter(Boolean).join(' · ')) + '</span></section>';
+  let h = piece;
+  if (Q.status === 'Expired') {
+    h += '<div class="calm"><span class="big">Quote expired.</span><p style="margin:0">Message us and we will send you a fresh one.</p>' + contact() + '</div>';
+  } else if (Q.status === 'Declined') {
+    h += '<div class="calm"><span class="big">Not this time.</span><p style="margin:0">We could not make that price work for this piece. Message us if you would like to change the size or design.</p>' + contact() + '</div>';
+  } else if (Q.status === 'Accepted' || Q.status === 'Booked') {
+    h += '<div class="calm"><span class="k">' + (Q.status === 'Booked' ? 'booked' : 'accepted') + '</span><span class="big">' + (Q.status === 'Booked' ? 'You’re booked.' : 'See you soon.') + '</span>' +
+      '<span class="mono" style="font-size:22px;color:var(--lime)">' + rp(Q.agreed || Q.quoted) + '</span>' +
+      (Q.prefDate ? '<span class="mono">your preference · ' + esc(Q.prefDate) + '</span>' : '') +
+      '<p style="margin:4px 0 0">' + (Q.status === 'Booked' ? 'Your session is in our calendar. We will remind you the day before.' : 'We will confirm your exact date on WhatsApp. A ' + rp(Q.deposit) + ' deposit holds it and comes off the final price.') + '</p>' +
+      (Q.status !== 'Booked' ? (Q.bank ? '<span class="k" style="margin-top:6px">deposit transfer</span><span class="mono" style="white-space:pre-wrap">' + esc(Q.bank) + '</span>' : '<span class="mono">we will send our bank details on whatsapp.</span>') : '') +
+      contact() + '</div>';
+  } else if (V.view === 'offer') {
+    h += '<h2>Make us an offer.</h2><p style="margin:0;color:var(--muted)">Tell us what works for you. The studio reads every offer and replies on WhatsApp.</p>' +
+      '<div id="err"></div><label class="l" for="amt">your price (rp)</label><input id="amt" class="input big" inputmode="numeric" placeholder="e.g. 800.000">' +
+      '<label class="l" for="why">anything we should know? (optional)</label><textarea id="why" class="input" placeholder="e.g. happy to make it smaller, or come on a weekday"></textarea>' +
+      '<button class="btn" id="go" data-a="sendOffer">Send offer</button><button class="link" data-a="back">back to the quote</button>';
+  } else if (V.view === 'accept') {
+    const t = new Date(); const min = t.getFullYear() + '-' + String(t.getMonth() + 1).padStart(2, '0') + '-' + String(t.getDate()).padStart(2, '0');
+    h += '<h2>When suits you?</h2><p style="margin:0;color:var(--muted)">Pick a day and a time of day. We confirm the exact slot on WhatsApp.</p>' +
+      '<div id="err"></div><label class="l" for="day">day</label><input id="day" type="date" class="input" min="' + min + '">' +
+      '<span class="l">time of day</span><div class="chips">' + ['morning', 'afternoon', 'evening', 'any time'].map(w => '<button data-a="when" data-w="' + w + '" aria-pressed="' + (V.when === w) + '">' + w + '</button>').join('') + '</div>' +
+      '<label class="l" for="why2">note (optional)</label><textarea id="why2" class="input" placeholder="anything we should know"></textarea>' +
+      '<button class="btn" id="go" data-a="sendAccept">Accept ' + rp(Q.quoted) + '</button><button class="link" data-a="back">back to the quote</button>';
+  } else {
+    if (Q.status === 'Offer received') h += '<div class="calm"><span class="k">offer sent</span><p style="margin:0">You offered ' + rp(Q.offer) + '. We will reply on WhatsApp, usually within a day. You can still accept our price below.</p></div>';
+    h += '<section class="price"><span class="k">our price</span><span class="v">' + rp(Q.quoted) + '</span><span class="s">about ' + hrs(Q.hours) + ' · ' + (Q.sessions > 1 ? Q.sessions + ' sessions' : 'one session') + '</span></section>' +
+      '<dl><div><dt>Deposit to hold your date</dt><dd>' + rp(Q.deposit) + '</dd></div><div><dt>Paid on the day</dt><dd>' + rp(Math.max(0, Q.quoted - Q.deposit)) + '</dd></div><div><dt>Includes</dt><dd>design, one revision, aftercare</dd></div></dl>' +
+      '<p class="note">we price by time: ' + rp(Q.rate) + ' an hour, with a one-hour minimum. black ink, with red as our only colour.</p>' +
+      '<button class="btn" data-a="accept">Accept and pick a date</button>' +
+      (Q.status === 'Offer received' ? '' : '<button class="btn ghost" data-a="offer">Suggest a different price</button>');
+  }
+  app.innerHTML = h;
+}
+function err(m) { const e = document.getElementById('err'); if (e) e.innerHTML = m ? '<div class="err" role="alert">' + esc(m) + '</div>' : ''; }
+function respond(action, data) {
+  const go = document.getElementById('go'); go.disabled = true; go.innerHTML = '<span class="spin"></span>';
+  google.script.run.withSuccessHandler(res => { Q = Object.assign(res, { k: Q.k }); V.view = 'quote'; render(); window.scrollTo(0, 0); })
+    .withFailureHandler(e => { err((e && e.message || 'Something went wrong').replace(/^Exception:\s*/, '')); go.disabled = false; go.textContent = action === 'offer' ? 'Send offer' : 'Accept ' + rp(Q.quoted); })
+    .api_quoteRespond(Q.id, Q.k, action, data);
+}
+const A = {
+  accept: () => { V.view = 'accept'; render(); },
+  offer: () => { V.view = 'offer'; render(); setTimeout(() => document.getElementById('amt').focus(), 50); },
+  back: () => { V.view = 'quote'; render(); },
+  when: d => { V.when = d.w; document.querySelectorAll('.chips button').forEach(b => b.setAttribute('aria-pressed', b.dataset.w === d.w)); },
+  sendOffer: () => {
+    const n = Number(String(document.getElementById('amt').value).replace(/\D/g, ''));
+    if (!n) return err('Enter the price you have in mind.');
+    respond('offer', { amount: n, note: document.getElementById('why').value });
+  },
+  sendAccept: () => {
+    const day = document.getElementById('day').value;
+    if (!day && !V.when) return err('Pick a day or a time of day, so we know what to offer you.');
+    respond('accept', { date: day ? nice(day) : '', when: V.when, note: document.getElementById('why2').value });
+  }
+};
+document.addEventListener('click', e => { const t = e.target.closest('[data-a]'); if (!t || !A[t.dataset.a]) return; e.preventDefault(); A[t.dataset.a](t.dataset); });
+render();
+</script>
+<script>KRIYA.start('quote');</script>
+</body>
+</html>
