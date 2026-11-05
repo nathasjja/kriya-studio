@@ -1,0 +1,1384 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>KRIYĀ Studio</title>
+<meta name="theme-color" content="#12130E">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="KRIYĀ Studio">
+<link rel="icon" href="icon.png"><link rel="apple-touch-icon" href="icon.png">
+<meta name="robots" content="noindex, nofollow">
+<script src="config.js"></script>
+<script src="kriya.js"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=DM+Mono:wght@400;500&display=swap">
+<style>
+:root{--ink:#12130E;--chrome:#0B0C08;--lime:#DCFF3E;--moss:#2F3B12;--moss-deep:#1A2108;--paper:#F3F0E8;--calm-mut:#C9CDB7;--nav:76px;
+--bg:#12130E;--surface:#1C1D17;--surface2:#26281F;--sunk:#16170F;--line:#2E3026;--line2:#3A3C31;--text:#F3F0E8;--muted:#A6A79A;--faint:#8C8E80;
+--hi:#DCFF3E;--btn-bg:#DCFF3E;--btn-fg:#12130E;--on-bg:#DCFF3E;--on-fg:#12130E;--chip-bg:#F3F0E8;--chip-fg:#12130E;--strong-bg:#F3F0E8;--strong-fg:#12130E;
+--check-bg:#DCFF3E;--check-fg:#12130E;--check-off:#6B6D61;--track:#2E3026;--fill:#DCFF3E;--scrim:rgba(0,0,0,.6)}
+html[data-theme=light]{--bg:#F3F0E8;--surface:#FAF8F2;--surface2:#E7E3D6;--sunk:#ECE8DC;--line:rgba(18,19,14,.14);--line2:rgba(18,19,14,.26);--text:#12130E;--muted:#55574C;--faint:#6E7064;
+--hi:#2F3B12;--btn-bg:#12130E;--btn-fg:#DCFF3E;--on-bg:#12130E;--on-fg:#DCFF3E;--chip-bg:#12130E;--chip-fg:#F3F0E8;--strong-bg:#12130E;--strong-fg:#F3F0E8;
+--check-bg:#12130E;--check-fg:#DCFF3E;--check-off:#8A8C80;--track:rgba(18,19,14,.14);--fill:#12130E;--scrim:rgba(18,19,14,.5)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:'Bricolage Grotesque',system-ui,sans-serif;font-size:16px;line-height:1.4;transition:background .2s}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+a{color:var(--hi)}
+.mono{font-family:'DM Mono',ui-monospace,monospace}
+.label{font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.02em;text-transform:lowercase;color:var(--muted)}
+.muted{color:var(--muted)}
+.hi{color:var(--hi)}
+.center{text-align:center}
+.wrap{max-width:640px;margin:0 auto;padding:0 16px}
+/* header + nav: ink in both themes, lime lives there */
+.top{position:sticky;top:0;z-index:5;background:var(--ink);color:var(--paper);border-bottom:1px solid #2A2C22}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;gap:8px}
+.wordbtn{background:none;border:0;padding:0;min-height:44px;color:inherit}
+.word{font-weight:800;font-stretch:75%;font-size:26px;letter-spacing:-.01em;line-height:1;color:var(--lime);display:flex;align-items:baseline;gap:10px}
+.word small{font-family:'DM Mono',monospace;font-weight:400;font-stretch:100%;font-size:12px;letter-spacing:.02em;color:#B9BAAD}
+.iconbtn{width:44px;height:44px;border-radius:10px;border:1px solid var(--line);background:transparent;display:inline-flex;align-items:center;justify-content:center;padding:0;flex:0 0 auto}
+.top .iconbtn{border-color:rgba(243,240,232,.18);color:var(--paper)}
+.me{display:flex;gap:6px;align-items:center}
+.me .who{height:44px;padding:0 12px;border-radius:10px;border:1px solid rgba(243,240,232,.18);background:transparent;font:400 13px 'DM Mono',monospace;color:#B9BAAD;max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+main{padding:18px 0 calc(var(--nav) + 100px)}
+h1,.pagetitle{font-size:46px;font-weight:800;font-stretch:75%;text-transform:uppercase;line-height:.9;margin:4px 0 16px;letter-spacing:-.005em}
+.hello{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.hello h1{margin:0}
+h2{font-size:30px;font-weight:800;font-stretch:75%;text-transform:uppercase;line-height:.92;margin:8px 0 14px;letter-spacing:-.005em}
+h3{font-size:22px;font-weight:800;font-stretch:75%;text-transform:uppercase;line-height:.95;margin:26px 0 12px;display:flex;align-items:center;gap:8px}
+.sechead{display:flex;justify-content:space-between;align-items:baseline;margin:24px 0 10px}
+.sechead h3{margin:0}
+.linkbtn{background:none;border:0;color:var(--hi);font:400 13px 'DM Mono',monospace;min-height:44px;padding:0}
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--chrome);border-top:1px solid #2A2C22;padding-bottom:env(safe-area-inset-bottom)}
+nav.tabs .wrap{display:grid;grid-template-columns:repeat(5,1fr);height:var(--nav);padding:0 6px}
+nav.tabs button{background:none;border:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;color:#A6A79A;font:400 11px 'DM Mono',monospace;text-transform:lowercase;position:relative}
+nav.tabs button[aria-current=page]{color:var(--lime)}
+.badge{position:absolute;top:12px;left:calc(50% + 6px);min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--lime);color:var(--ink);font:500 11px/18px 'DM Mono',monospace}
+.fab{position:fixed;right:max(16px,calc(50% - 304px));bottom:calc(var(--nav) + 16px + env(safe-area-inset-bottom));z-index:6;height:56px;padding:0 22px;border-radius:14px;border:2px solid var(--ink);background:var(--lime);color:var(--ink);font-weight:800;font-stretch:75%;font-size:22px;text-transform:uppercase;display:flex;gap:8px;align-items:center;box-shadow:4px 4px 0 var(--chrome)}
+/* segmented controls */
+.segbar{display:grid;gap:4px;padding:4px;border-radius:12px;background:var(--surface);border:1px solid var(--line);margin:0 0 14px}
+.segbar button{height:44px;border-radius:9px;border:0;background:transparent;color:var(--muted);font:400 13px 'DM Mono',monospace;text-transform:lowercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 6px}
+.segbar button[aria-pressed=true]{background:var(--on-bg);color:var(--on-fg)}
+.seg{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 16px}
+.seg button{height:42px;padding:0 14px;border-radius:21px;border:1px solid var(--line2);background:transparent;font:400 13px 'DM Mono',monospace;text-transform:lowercase;color:var(--text)}
+.seg button[aria-pressed=true]{background:var(--chip-bg);color:var(--chip-fg);border-color:var(--chip-bg)}
+/* calm (moss) panels: same in both themes */
+.calm{background:var(--moss);color:var(--paper);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:10px;margin:0 0 6px}
+.calm .row{align-items:baseline}
+.calm-hi{color:var(--lime)!important}
+.calm-mut{color:var(--calm-mut)!important}
+.bignum{font:500 36px/1 'DM Mono',monospace}
+.bignum .calm-mut{font-size:15px}
+.calm-bar{background:var(--moss-deep)!important;margin-top:0}
+.calm-bar i{background:var(--lime)!important}
+.calm-input{background:var(--moss-deep);border-color:#4A5A1F;color:var(--paper);margin-top:6px}
+.mycomm{margin-bottom:14px}
+/* checklist */
+.check{width:100%;min-height:58px;display:flex;align-items:center;gap:12px;padding:10px 14px;margin:0 0 8px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--text);text-align:left}
+.check .box{flex:0 0 auto;width:26px;height:26px;border-radius:7px;border:2px solid var(--check-off);display:flex;align-items:center;justify-content:center;color:var(--check-fg);transition:transform .12s}
+.check .ct{flex:1 1 auto;display:flex;flex-direction:column;gap:2px;min-width:0}
+.check .ci{font-size:16px;line-height:1.25}
+.check .cm{font:400 12px 'DM Mono',monospace;color:var(--muted)}
+.check.on{background:var(--sunk)}
+.check.on .box{background:var(--check-bg);border-color:var(--check-bg);transform:scale(1.04)}
+.check.on .ci{color:var(--faint);text-decoration:line-through}
+.check:active .box{transform:scale(.9)}
+/* day strip */
+.days{display:flex;gap:8px;overflow-x:auto;padding:2px 0 10px;scrollbar-width:none}
+.days::-webkit-scrollbar{display:none}
+.day{flex:0 0 56px;height:74px;border-radius:12px;border:1px solid var(--line);background:var(--surface);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--text)}
+.day .d{font-weight:800;font-stretch:75%;font-size:26px;line-height:1}
+.day .w{font:400 11px 'DM Mono',monospace;text-transform:lowercase;color:var(--muted)}
+.day .dots{height:6px;display:flex;gap:3px}
+.day .dots i{width:5px;height:5px;border-radius:3px;background:var(--hi)}
+.day[aria-pressed=true]{background:var(--on-bg);color:var(--on-fg);border-color:var(--on-bg)}
+.day[aria-pressed=true] .w{color:inherit;opacity:.75}
+.day[aria-pressed=true] .dots i{background:var(--on-fg)}
+/* cards */
+.card{display:block;width:100%;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:10px;color:var(--text);text-decoration:none}
+.card:active{background:var(--surface2)}
+.calmcard{background:var(--moss);border-color:var(--moss);color:var(--paper)}
+.calmcard .sub,.calmcard .openlist{color:var(--lime)}
+.calmcard .bar{background:var(--moss-deep)}
+.calmcard .bar i{background:var(--lime)}
+.calmcard .count{color:var(--lime)}
+.rowcard{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:16px}
+.rowcard>span:first-child{display:flex;flex-direction:column;gap:2px}
+.row{display:flex;gap:12px;align-items:flex-start;justify-content:space-between}
+.time{font:500 15px 'DM Mono',monospace;min-width:52px;padding-top:2px;color:var(--hi)}
+.title{font-weight:700;font-size:18px;line-height:1.2}
+.sub{font-size:14px;color:var(--muted);margin-top:2px}
+.avatar{width:36px;height:36px;border-radius:18px;background:var(--surface2);color:var(--text);font:400 12px 'DM Mono',monospace;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.calmcard .avatar{background:var(--moss-deep);color:var(--paper)}
+.avatar.sm{width:26px;height:26px;font-size:11px}
+.count{font:500 20px 'DM Mono',monospace}
+.openlist{margin:8px 0 4px;font-size:14px;line-height:1.4}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;align-items:center}
+.pill{font:400 12px 'DM Mono',monospace;text-transform:lowercase;padding:3px 8px;border-radius:6px;border:1px solid var(--line2);color:var(--muted);white-space:nowrap}
+.pill.ok{background:var(--moss);border-color:var(--moss);color:var(--lime)}
+.pill.warn{background:var(--lime);border-color:var(--lime);color:var(--ink)}
+.pill.off{text-decoration:line-through}
+.pill.idchip{background:var(--surface2);border-color:var(--surface2);color:var(--text)}
+.pill.plain{border:0;padding:3px 0}
+.pill.prio-urgent{background:var(--lime);border-color:var(--lime);color:var(--ink)}
+.pill.prio-high{color:var(--text);border-color:var(--check-off)}
+.pill.due-over{background:var(--strong-bg);border-color:var(--strong-bg);color:var(--strong-fg)}
+.pill.due-soon{border-color:var(--hi);color:var(--hi)}
+.pill.due-week{color:var(--text)}
+.task .tt{display:block;margin:0 0 8px}
+.task.isdone .tt{color:var(--faint);text-decoration:line-through}
+.blockline{display:block;background:var(--moss);color:var(--paper);border-radius:10px;padding:9px 12px;font-size:14px;line-height:1.35;margin:0 0 8px}
+.ownerline{display:flex;align-items:center;gap:8px;font-size:14px}
+.ell{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;margin:0 0 0 4px}
+.empty{border:1.5px dashed var(--line2);border-radius:14px;padding:28px 16px;text-align:center;color:var(--muted);font-family:'DM Mono',monospace;font-size:14px;text-transform:lowercase}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:6px}
+.stat{background:var(--surface2);border-radius:12px;padding:14px}
+.stat.hot{background:var(--lime);color:var(--ink)}
+.stat.hot .muted{color:#3A3C31}
+.stat .n{font:500 21px 'DM Mono',monospace;margin-top:6px}
+.bar{height:8px;border-radius:4px;background:var(--track);overflow:hidden;margin-top:10px}
+.bar i{display:block;height:100%;background:var(--fill);border-radius:4px;transition:width .3s}
+.stat.hot .bar{background:rgba(18,19,14,.15)}
+.stat.hot .bar i{background:var(--ink)}
+.callout{background:var(--moss);color:var(--paper);border-radius:12px;padding:12px 14px;margin:12px 0}
+.callout .label{color:var(--lime)}
+table{width:100%;border-collapse:collapse;font-size:15px}
+td,th{padding:10px 0;border-bottom:1px solid var(--line);text-align:left}
+th{font:400 12px 'DM Mono',monospace;text-transform:lowercase;color:var(--muted)}
+td.r,th.r{text-align:right;font-family:'DM Mono',monospace;padding-left:14px;white-space:nowrap}
+tr.me-row td{color:var(--hi);font-weight:600}
+.whisper{font:400 13px 'DM Mono',monospace;text-transform:lowercase;color:var(--muted);margin:10px 0}
+/* sheets */
+.scrim{position:fixed;inset:0;background:var(--scrim);z-index:20;display:flex;align-items:flex-end;justify-content:center}
+.sheet{width:100%;max-width:640px;max-height:94vh;overflow:auto;background:var(--bg);color:var(--text);border-radius:20px 20px 0 0;border:1px solid var(--line);border-bottom:0;padding:0 16px calc(24px + env(safe-area-inset-bottom));animation:up .22s ease-out}
+@keyframes up{from{transform:translateY(24px);opacity:.6}to{transform:none;opacity:1}}
+.sheet .head{position:sticky;top:0;background:var(--bg);display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 0 12px;border-bottom:2px solid var(--text);margin-bottom:14px;z-index:2}
+.sheet .head h2{margin:0;font-size:30px}
+.tasktitle{font-size:34px;margin:0 0 16px}
+.statusgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:6px 0 4px}
+.statusgrid button{height:46px;border-radius:12px;border:1px solid var(--line2);background:transparent;font:400 14px 'DM Mono',monospace;color:var(--text)}
+.statusgrid button[aria-pressed=true]{background:var(--on-bg);color:var(--on-fg);border-color:var(--on-bg)}
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0}
+.facts div{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.facts dt{font:400 12px 'DM Mono',monospace;color:var(--muted)}
+.facts dd{margin:4px 0 0}
+.desc{margin:6px 0 10px;line-height:1.45;white-space:pre-wrap}
+.upd{display:flex;flex-direction:column;gap:3px;padding:0 0 10px;margin:0 0 10px;border-bottom:1px solid var(--line);font-size:15px;line-height:1.4}
+.inrow{display:flex;gap:8px;margin-top:6px}
+.inrow .input{flex:1 1 auto;min-width:0}
+.kv{display:grid;grid-template-columns:96px 1fr;gap:9px 12px;font-size:15px;margin:8px 0}
+.kv dt{font:400 12px 'DM Mono',monospace;text-transform:lowercase;color:var(--muted);padding-top:3px}
+.kv dd{margin:0}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0}
+.btn{min-height:48px;border-radius:12px;border:1px solid var(--line2);background:var(--surface);display:flex;align-items:center;justify-content:center;gap:8px;font-weight:600;text-decoration:none;color:var(--text);padding:0 14px}
+.btn.primary{background:var(--btn-bg);border-color:var(--btn-bg);color:var(--btn-fg);font-weight:800;font-stretch:75%;font-size:21px;text-transform:uppercase;min-height:54px}
+.btn.wide{grid-column:1/-1;width:100%;margin-top:6px}
+.btn:disabled{opacity:.5}
+.note{background:var(--moss);color:var(--paper);border-radius:12px;padding:14px;margin:8px 0 14px;white-space:pre-wrap}
+.note .label{color:var(--lime);display:block;margin-bottom:6px}
+/* forms */
+.field{margin-bottom:14px}
+.field label{display:block;margin-bottom:6px}
+.input,select.input,textarea.input{width:100%;min-height:48px;border-radius:12px;border:1px solid var(--line2);background:var(--surface);color:var(--text);padding:12px 14px;font-size:16px;outline:none}
+textarea.input{min-height:90px;resize:vertical}
+.input:focus{border-color:var(--text);box-shadow:0 0 0 1px var(--text)}
+.input::placeholder{color:var(--faint)}
+html[data-theme=dark] input[type=date]{color-scheme:dark}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stepper{display:flex;align-items:center;border:1px solid var(--line2);border-radius:12px;background:var(--surface);height:48px}
+.stepper button{width:48px;height:46px;border:0;background:none;font-size:22px;color:var(--text)}
+.stepper span{flex:1;text-align:center;font:500 16px 'DM Mono',monospace}
+.suggest{border:1px solid var(--line2);border-radius:12px;margin-top:6px;overflow:hidden}
+.suggest button{display:block;width:100%;text-align:left;padding:12px 14px;border:0;border-bottom:1px solid var(--line);background:var(--surface);min-height:46px;color:var(--text)}
+.suggest button:last-child{border-bottom:0}
+.chosen{display:flex;justify-content:space-between;align-items:center;background:var(--moss);color:var(--paper);border-radius:12px;padding:10px 10px 10px 14px}
+.chosen .sub{color:var(--calm-mut)}
+.chosen .iconbtn{border-color:rgba(243,240,232,.3);color:var(--paper)}
+.thumbs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0}
+.thumbs a,.thumbs div{aspect-ratio:1;border-radius:10px;overflow:hidden;background:var(--surface2);display:flex;align-items:center;justify-content:center}
+.thumbs img{width:100%;height:100%;object-fit:cover}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--nav) + 90px);z-index:40;background:var(--ink);color:var(--lime);padding:12px 18px;border-radius:12px;font:400 14px 'DM Mono',monospace;text-transform:lowercase;max-width:90vw;border:1px solid #2E3026;animation:up .18s ease-out}
+.toast.err{background:var(--lime);color:var(--ink);border:2px solid var(--ink)}
+/* lock */
+.lockbg{background:var(--lime);min-height:100vh;color:var(--ink)}
+.lock{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:32px 24px;max-width:420px;margin:0 auto}
+.lock .word{color:var(--ink);font-size:30px}
+.lock .word small{color:var(--ink)}
+.lock h1{font-size:clamp(52px,16vw,64px);margin:28px 0 10px;letter-spacing:-.01em;color:var(--ink)}
+.lock .whisper{font:400 14px 'DM Mono',monospace;text-transform:lowercase;margin:0 0 28px;color:var(--ink)}
+.lock .label{color:var(--ink)}
+.lock .input{background:var(--paper);border:2px solid var(--ink);color:var(--ink)}
+.lock .btn.primary{background:var(--ink);border-color:var(--ink);color:var(--lime)}
+.who-list{display:flex;flex-direction:column;gap:8px}
+.who-btn{justify-content:space-between;background:var(--paper);border:2px solid var(--ink);color:var(--ink);min-height:58px;font-size:18px}
+.who-btn .mono{font-size:12px;font-weight:400}
+.codebox{font:500 28px 'DM Mono',monospace;letter-spacing:.4em;text-align:center}
+.spin{width:18px;height:18px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:s .8s linear infinite;display:inline-block}
+@keyframes s{to{transform:rotate(360deg)}}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.range{width:100%;height:32px;accent-color:var(--hi)}
+html[data-theme=dark] .range{accent-color:#DCFF3E}
+.detailgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:6px 0 4px}
+.detailgrid button{min-height:56px;border-radius:12px;border:1px solid var(--line2);background:transparent;color:var(--text);display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:2px;padding:8px 12px;text-align:left;font-weight:600;font-size:15px}
+.detailgrid button .mono{font-weight:400;font-size:11px;opacity:.8}
+.detailgrid button[aria-pressed=true]{background:var(--on-bg);color:var(--on-fg);border-color:var(--on-bg)}
+#calcOut{margin-top:14px}
+.qprice{font-size:20px!important}
+.qprice.warn{border-color:var(--hi);box-shadow:0 0 0 1px var(--hi)}
+.qlog{margin:12px 0 4px;font-size:12px;color:var(--muted)}
+.qlog summary{cursor:pointer;min-height:32px;display:flex;align-items:center}
+.qlog div{padding:3px 0;border-bottom:1px solid var(--line)}
+a.btn{text-decoration:none}
+.steps{display:flex;gap:8px;margin:-6px 0 16px}
+.steps span{font:400 12px 'DM Mono',monospace;color:var(--muted);padding:4px 10px;border-radius:6px;border:1px solid var(--line2)}
+.steps span.on{background:var(--on-bg);color:var(--on-fg);border-color:var(--on-bg)}
+nav.tabs .wrap{grid-template-columns:repeat(6,1fr)!important;padding:0 2px}
+nav.tabs button{font-size:10.5px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="layer"></div>
+<script type="text/plain" id="kriya-main">
+const BOOT = window.__BOOT;
+const S = {
+  code: ls('kriya_code'), me: ls('kriya_me'), data: null, tab: ls('kriya_tab') || 'today',
+  todayView: 'mine', bookView: 'schedule', day: null, reqFilter: 'New', taskScope: 'mine', taskFilter: 'all',
+  clientQ: '', outreach: false, month: null, form: null, blocking: null, pending: 0, lastRefresh: 0, newReqSeen: null
+};
+const A = {}; // click actions
+
+/* ---------- utils ---------- */
+function ls(k, v) { try { if (v === undefined) return localStorage.getItem(k) || ''; if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) { return ''; } }
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+function rp(n) { return 'Rp' + Math.round(+n || 0).toLocaleString('id-ID'); }
+function pd(s) { const [y, m, d] = String(s).split('-').map(Number); return new Date(y, (m || 1) - 1, d || 1); }
+function ymd(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+function addDays(s, n) { const d = pd(s); d.setDate(d.getDate() + n); return ymd(d); }
+function nice(s, opt) { if (!/^\d{4}-\d{2}-\d{2}$/.test(s || '')) return s || '—'; return pd(s).toLocaleDateString('en-GB', opt || { weekday: 'short', day: 'numeric', month: 'short' }); }
+function daysSince(s) { if (!/^\d{4}-\d{2}-\d{2}/.test(s || '')) return null; return Math.round((pd(today()) - pd(s)) / 864e5); }
+function today() { return ymd(new Date()); }
+function nowHM() { const d = new Date(); return String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); }
+function mins(t) { const m = String(t || '').match(/(\d{1,2}):(\d{2})/); return m ? (+m[1]) * 60 + (+m[2]) : null; }
+function statusKind(s) { s = String(s || ''); if (/cancel/i.test(s)) return 'cancelled'; if (/no.?show/i.test(s)) return 'noshow'; if (/complet|done|finish/i.test(s)) return 'done'; return 'active'; }
+function payKind(s) { s = String(s || ''); if (/refund/i.test(s)) return 'refunded'; if (/unpaid|pending|due|not/i.test(s)) return 'unpaid'; if (/deposit|partial|dp/i.test(s)) return 'deposit'; if (/paid|full|settled|lunas/i.test(s)) return 'paid'; return 'unpaid'; }
+function phoneLink(p) { let d = String(p || '').replace(/\D/g, ''); if (!d) return ''; if (d[0] === '0') d = '62' + d.slice(1); return d; }
+function handleOf(h) { return String(h || '').trim().replace(/^@+/, '').replace(/^https?:\/\/(www\.)?instagram\.com\//, '').replace(/\/.*$/, ''); }
+function first(n) { return String(n || '').trim().split(/\s+/)[0]; }
+function run(fn, ...args) {
+  return new Promise((ok, bad) => google.script.run.withSuccessHandler(ok).withFailureHandler(e => {
+    const msg = (e && e.message) || String(e);
+    if (/AUTH:/.test(msg) && S.code) { ls('kriya_code', null); ls('kriya_data', null); S.code = ''; S.data = null; }
+    bad(new Error(msg.replace(/^.*?AUTH:\s*/, '').replace(/^Exception:\s*/, '')));
+  })[fn](...args));
+}
+function toast(msg, err) {
+  if (err) SFX.error();
+  document.querySelectorAll('.toast').forEach(t => t.remove());
+  const t = document.createElement('div'); t.className = 'toast' + (err ? ' err' : ''); t.setAttribute('role', 'status'); t.textContent = msg;
+  document.body.appendChild(t); setTimeout(() => t.remove(), err ? 4200 : 2400);
+}
+
+/* ---------- sound: tiny synthesized cues, no files ---------- */
+const SFX = (() => {
+  let ctx = null;
+  const on = () => ls('kriya_sound') !== 'off';
+  function ac() {
+    if (!ctx) { const C = window.AudioContext || window.webkitAudioContext; if (!C) return null; try { ctx = new C(); } catch (e) { return null; } }
+    if (ctx.state === 'suspended') ctx.resume();
+    return ctx;
+  }
+  function tone(f, t0, dur, type, vol, f2) {
+    const c = ac(); if (!c) return;
+    const o = c.createOscillator(), g = c.createGain(), t = c.currentTime + t0;
+    o.type = type || 'sine'; o.frequency.setValueAtTime(f, t);
+    if (f2) o.frequency.exponentialRampToValueAtTime(f2, t + dur);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + 0.008); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g); g.connect(c.destination); o.start(t); o.stop(t + dur + 0.02);
+  }
+  // a short low buzz, like a tattoo machine starting
+  function machine(t0, dur, vol) {
+    const c = ac(); if (!c) return;
+    const t = c.currentTime + t0;
+    const o = c.createOscillator(), lfo = c.createOscillator(), lg = c.createGain(), f = c.createBiquadFilter(), g = c.createGain();
+    o.type = 'sawtooth'; o.frequency.setValueAtTime(92, t);
+    lfo.frequency.setValueAtTime(46, t); lg.gain.setValueAtTime(vol * 0.6, t);
+    f.type = 'lowpass'; f.frequency.setValueAtTime(700, t);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + 0.02); g.gain.setValueAtTime(vol, t + dur - 0.05); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    lfo.connect(lg); lg.connect(g.gain); o.connect(f); f.connect(g); g.connect(c.destination);
+    o.start(t); lfo.start(t); o.stop(t + dur + 0.02); lfo.stop(t + dur + 0.02);
+  }
+  const play = fn => () => { if (on()) try { fn(); } catch (e) { } };
+  return {
+    on: on, unlock: () => { if (on()) ac(); },
+    tap: play(() => tone(1400, 0, 0.03, 'sine', 0.025)),
+    tick: play(() => { tone(880, 0, 0.07, 'triangle', 0.07, 1320); tone(2640, 0.01, 0.05, 'sine', 0.015); }),
+    untick: play(() => tone(660, 0, 0.08, 'triangle', 0.05, 440)),
+    allDone: play(() => [523, 659, 784, 1047].forEach((f, i) => tone(f, i * 0.075, 0.22, 'triangle', 0.07))),
+    save: play(() => { machine(0, 0.32, 0.05); tone(1175, 0.34, 0.25, 'sine', 0.06); }),
+    status: play(() => { tone(587, 0, 0.09, 'triangle', 0.06); tone(880, 0.08, 0.14, 'triangle', 0.06); }),
+    ping: play(() => { tone(1318, 0, 0.5, 'sine', 0.06); tone(1760, 0.09, 0.45, 'sine', 0.04); }),
+    error: play(() => { tone(220, 0, 0.09, 'square', 0.025); tone(174, 0.11, 0.14, 'square', 0.025); })
+  };
+})();
+
+/* ---------- theme ---------- */
+function themeNow() { return ls('kriya_theme') || (window.matchMedia && matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'); }
+function applyTheme() { document.documentElement.setAttribute('data-theme', themeNow()); }
+A.theme = () => { ls('kriya_theme', themeNow() === 'dark' ? 'light' : 'dark'); applyTheme(); SFX.tap(); render(); };
+A.sound = () => { ls('kriya_sound', SFX.on() ? 'off' : 'on'); SFX.tick(); render(); toast(SFX.on() ? 'Sounds on' : 'Sounds off'); };
+try { matchMedia('(prefers-color-scheme: light)').addEventListener('change', () => { if (!ls('kriya_theme')) { applyTheme(); } }); } catch (e) { }
+applyTheme();
+
+const I = (d, w) => '<svg width="' + (w || 22) + '" height="' + (w || 22) + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + d + '</svg>';
+const ICON = {
+  today: I('<circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.8 2.8L16 10"/>'),
+  cal: I('<rect x="3" y="4.5" width="18" height="16" rx="2.5"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4"/>'),
+  tasks: I('<path d="M10 6h10M10 12h10M10 18h10"/><path d="M3.5 6l1.3 1.3L7.3 4.8M3.5 12l1.3 1.3 2.5-2.5M3.5 18l1.3 1.3 2.5-2.5"/>'),
+  people: I('<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><path d="M16 4.8a3.3 3.3 0 0 1 0 6.4M18 14.8c1.8.7 3 2.4 3.5 5.2"/>'),
+  coin: I('<path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/>'),
+  quote: I('<rect x="5" y="2.5" width="14" height="19" rx="2.5"/><path d="M8.5 6.5h7M8.5 11h1M12 11h1M15.5 11h0M8.5 14.5h1M12 14.5h1M8.5 18h1M12 18h1M15.5 14.5V18"/>'),
+  plus: I('<path d="M12 5v14M5 12h14"/>', 20),
+  close: I('<path d="M6 6l12 12M18 6L6 18"/>', 20),
+  back: I('<path d="M15 5l-7 7 7 7"/>', 20),
+  sun: I('<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>', 20),
+  moon: I('<path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/>', 20),
+  soundOn: I('<path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/>', 20),
+  soundOff: I('<path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/>', 20),
+  check: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+  wa: I('<path d="M4 20l1.3-4A8 8 0 1 1 8 18.7z"/>', 18),
+  ig: I('<rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/>', 18),
+  mail: I('<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>', 18),
+  cam: I('<path d="M4 8h3l2-2.5h6L17 8h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>', 18),
+  sheet: I('<rect x="4" y="3.5" width="16" height="17" rx="2"/><path d="M4 9h16M4 14.5h16M10 9v11.5"/>', 18)
+};
+function word(small) { return '<div class="word">KRIYĀ' + (small ? '<small>studio</small>' : '') + '</div>'; }
+
+/* ---------- data ---------- */
+function newRequests() { return ((S.data && S.data.requests) || []).filter(r => (r.status || 'New') === 'New').length; }
+function attention() { return newRequests() + (S.data && S.data.quotes ? S.data.quotes.filter(q => (q.status === 'Offer received' || q.status === 'Accepted') && !q.expired && !q.bookingId).length : 0); }
+function setData(d) {
+  const before = S.data ? attention() : null;
+  S.data = d;
+  try { ls('kriya_data', JSON.stringify(d)); } catch (e) { }
+  if (!S.day) S.day = d.today; if (!S.month) S.month = d.today.slice(0, 7);
+  S.lastRefresh = Date.now();
+  const after = attention();
+  if (before !== null && after > before) { SFX.ping(); toast(after - before === 1 ? 'New request or client reply' : (after - before) + ' new requests or client replies'); }
+}
+function saveCache() { try { ls('kriya_data', JSON.stringify(S.data)); } catch (e) { } }
+function bookings() { return (S.data && S.data.bookings) || []; }
+function team() { return (S.data && S.data.team) || []; }
+function meRec() { return team().find(t => t.name === S.me) || null; }
+function clientById(id) { return (S.data.clients || []).find(c => c.id === id); }
+function clientFor(b) { return clientById(b.clientId) || (S.data.clients || []).find(c => c.name.toLowerCase() === String(b.client).toLowerCase()); }
+function byStart(a, b) { return (a.date + (a.start || '99')).localeCompare(b.date + (b.start || '99')); }
+async function refresh(quiet) {
+  try { setData(await run('api_bootstrap', S.code)); render(); if (!quiet) toast('Up to date'); }
+  catch (e) { if (!S.code) render(); else if (!quiet) toast(e.message, true); }
+}
+A.refresh = () => { SFX.tap(); refresh(); };
+
+/* ---------- lock ---------- */
+function renderLock(step) {
+  const app = document.getElementById('app');
+  if (step === 'who') {
+    const people = team().length ? team() : (S.data.reps || []).map(n => ({ name: n, role: '' }));
+    app.innerHTML = '<div class="lockbg"><div class="lock">' + word(true) + '<h1>Who’s working?</h1><p class="whisper">pick your name. this phone remembers it.</p>' +
+      '<div class="who-list">' + people.map(p => '<button class="btn wide who-btn" data-a="pickWho" data-n="' + esc(p.name) + '"><span>' + esc(p.name) + '</span><span class="mono">' + esc((p.role || '').toLowerCase()) + '</span></button>').join('') + '</div>' +
+      '<p class="whisper" style="margin-top:18px">not listed? ask nathasjja to add you to the App Team tab.</p></div></div>';
+    return;
+  }
+  app.innerHTML = '<div class="lockbg"><div class="lock">' + word(true) + '<h1>Open the studio.</h1><p class="whisper">studio code only. this phone remembers it.</p>' +
+    '<form id="codeForm"><div class="field"><label class="label" for="codeIn">studio code</label>' +
+    '<input id="codeIn" class="input codebox" inputmode="numeric" autocomplete="one-time-code" maxlength="6" required></div>' +
+    '<button class="btn primary wide" id="codeBtn">Open the studio</button></form>' +
+    '<p class="whisper" style="margin-top:18px">no code? ask nathasjja.</p></div></div>';
+  document.getElementById('codeForm').onsubmit = async e => {
+    e.preventDefault(); SFX.unlock();
+    const btn = document.getElementById('codeBtn'), code = document.getElementById('codeIn').value.trim();
+    btn.disabled = true; btn.innerHTML = '<span class="spin"></span>';
+    try {
+      const d = await run('api_login', code);
+      S.code = code; ls('kriya_code', code); setData(d); SFX.status();
+      S.me && meRec() ? render() : renderLock('who');
+    } catch (err) { toast(err.message, true); btn.disabled = false; btn.textContent = 'Open the studio'; }
+  };
+  setTimeout(() => document.getElementById('codeIn').focus(), 50);
+}
+A.pickWho = d => { S.me = d.n; ls('kriya_me', d.n); S.tab = 'today'; SFX.allDone(); render(); };
+A.switchMe = () => { ls('kriya_me', null); S.me = ''; renderLock('who'); };
+
+/* ---------- shell ---------- */
+function myOpenDue() {
+  return (S.data.tasks || []).filter(t => t.owner === S.me && taskKind(t.status) !== 'done' && t.due && daysSince(t.due) >= 0).length;
+}
+function render() {
+  if (!S.code || !S.data) return renderLock();
+  if (!S.me || (team().length && !meRec())) return renderLock('who');
+  const tabs = [['today', 'today', ICON.today], ['bookings', 'bookings', ICON.cal], ['quote', 'quote', ICON.quote], ['tasks', 'tasks', ICON.tasks], ['clients', 'clients', ICON.people], ['money', 'money', ICON.coin]];
+  if (!tabs.some(t => t[0] === S.tab)) S.tab = 'today';
+  const badge = { bookings: attention() - walkAttention(), quote: walkAttention(), tasks: myOpenDue() };
+  const body = { today: viewToday, bookings: viewBookings, quote: viewQuote, tasks: viewTasks, clients: viewClients, money: viewMoney }[S.tab]();
+  const fab = S.tab === 'bookings' || S.tab === 'clients' ? '<button class="fab" data-a="newBooking">' + ICON.plus + 'Book</button>'
+    : S.tab === 'tasks' ? '<button class="fab" data-a="newTask">' + ICON.plus + 'Task</button>' : '';
+  document.getElementById('app').innerHTML =
+    '<header class="top"><div class="wrap"><button class="wordbtn" data-a="refresh" aria-label="KRIYĀ studio, refresh">' + word(true) + '</button>' +
+    '<div class="me">' +
+    '<button class="iconbtn" data-a="sound" aria-label="' + (SFX.on() ? 'Turn sounds off' : 'Turn sounds on') + '">' + (SFX.on() ? ICON.soundOn : ICON.soundOff) + '</button>' +
+    '<button class="iconbtn" data-a="theme" aria-label="' + (themeNow() === 'dark' ? 'Switch to light mode' : 'Switch to dark mode') + '">' + (themeNow() === 'dark' ? ICON.sun : ICON.moon) + '</button>' +
+    '<button class="who" data-a="switchMe" aria-label="Signed in as ' + esc(S.me) + ', switch person">' + esc(first(S.me).toLowerCase()) + '</button>' +
+    '</div></div></header>' +
+    '<main><div class="wrap">' + body + '</div></main>' + fab +
+    '<nav class="tabs" aria-label="Sections"><div class="wrap">' + tabs.map(([k, l, i]) =>
+      '<button data-a="tab" data-k="' + k + '"' + (S.tab === k ? ' aria-current="page"' : '') + '>' + i + l +
+      (badge[k] ? '<span class="badge">' + badge[k] + '</span>' : '') + '</button>').join('') + '</div></nav>';
+  afterRender();
+}
+A.tab = d => { if (S.tab !== d.k) SFX.tap(); S.tab = d.k; ls('kriya_tab', d.k); render(); window.scrollTo(0, 0); };
+function seg(action, current, options, label) {
+  return '<div class="segbar" role="group" aria-label="' + esc(label) + '" style="grid-template-columns:repeat(' + options.length + ',minmax(0,1fr))">' + options.map(([k, l]) =>
+    '<button data-a="' + action + '" data-k="' + k + '" aria-pressed="' + (current === k) + '">' + l + '</button>').join('') + '</div>';
+}
+
+/* ---------- today: daily checklist ---------- */
+function cl() { return (S.data && S.data.checklist) || { items: [], done: {}, workday: true }; }
+function itemsFor(p) { return cl().items.filter(i => i.person === p); }
+function doneRec(p, id) { return cl().done[p + '|' + id]; }
+function sections(items) { const out = []; items.forEach(i => { let s = out.find(x => x.name === i.section); if (!s) out.push(s = { name: i.section, items: [] }); s.items.push(i); }); return out; }
+function viewToday() {
+  const t = today();
+  let h = '<div class="hello"><span class="label">' + esc(pd(t).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'short' }).toLowerCase()) + '</span>' +
+    '<h1>' + (S.todayView === 'team' ? 'Team.' : esc(first(S.me)) + '’s day.') + '</h1></div>';
+  h += seg('todayView', S.todayView, [['mine', 'my checklist'], ['team', 'team']], 'View');
+  return h + (S.todayView === 'team' ? viewTeam() : viewMine());
+}
+A.todayView = d => { SFX.tap(); S.todayView = d.k; render(); };
+function viewMine() {
+  const c = cl(), mine = itemsFor(S.me);
+  let h = '';
+  if (!c.workday) {
+    h += '<div class="calm"><div class="label calm-hi">day off</div><p style="margin:6px 0 0">No checklist today. It comes back on workdays (' + esc(c.workdays.toLowerCase()) + ').</p></div>';
+  } else if (!mine.length) {
+    h += '<div class="empty">no checklist items for you yet.<br>' + (S.data.links ? '<a href="' + esc(S.data.links.checklist) + '" target="_blank" rel="noopener">add them in the daily checklist tab</a>' : '') + '</div>';
+  } else {
+    const done = mine.filter(i => doneRec(S.me, i.id)).length, next = mine.find(i => !doneRec(S.me, i.id));
+    h += '<section class="calm"><span class="label calm-hi">daily checklist</span>' +
+      '<div class="bignum"><span class="calm-hi">' + done + '</span><span class="calm-mut"> of ' + mine.length + ' done</span></div>' +
+      '<div class="bar calm-bar" role="img" aria-label="' + Math.round(done / mine.length * 100) + '% done"><i style="width:' + Math.round(done / mine.length * 100) + '%"></i></div>' +
+      '<span class="label calm-mut">' + (next ? 'next · ' + esc(next.item.toLowerCase()) : 'all done for today') + '</span></section>';
+    sections(mine).forEach(s => {
+      const n = s.items.filter(i => doneRec(S.me, i.id)).length;
+      h += '<div class="sechead"><h3>' + esc(s.name) + '</h3><span class="label">' + n + '/' + s.items.length + '</span></div>';
+      h += s.items.map(i => {
+        const r = doneRec(S.me, i.id);
+        return '<button class="check' + (r ? ' on' : '') + '" data-a="tick" data-id="' + esc(i.id) + '" aria-pressed="' + !!r + '">' +
+          '<span class="box">' + (r ? ICON.check : '') + '</span><span class="ct"><span class="ci">' + esc(i.item) + '</span>' +
+          '<span class="cm">' + (r ? 'done ' + esc(r.at || nowHM()) + (r.by && r.by !== S.me ? ' · ' + esc(first(r.by).toLowerCase()) : '') : esc(i.note)) + '</span></span></button>';
+      }).join('');
+    });
+  }
+  // my tasks due today or overdue, then urgent
+  const tasks = (S.data.tasks || []).filter(t => t.owner === S.me && taskKind(t.status) !== 'done')
+    .sort((a, b) => taskRank(a) - taskRank(b)).slice(0, 4);
+  h += '<div class="sechead"><h3>My tasks</h3><button class="linkbtn" data-a="tab" data-k="tasks">all →</button></div>';
+  h += tasks.length ? tasks.map(taskCard).join('') : '<div class="empty">no open tasks.</div>';
+  const todays = bookings().filter(b => b.date === today() && statusKind(b.status) !== 'cancelled').sort(byStart);
+  h += '<button class="card rowcard" data-a="goSchedule"><span><span class="title">' + (todays.length ? todays.length + ' session' + (todays.length > 1 ? 's' : '') + ' in the studio today' : 'No sessions today') + '</span>' +
+    '<span class="sub mono">' + esc(todays.map(b => b.start || '—').join(' · ')) + '</span></span><span class="hi mono">schedule →</span></button>';
+  return h;
+}
+A.goSchedule = () => { S.tab = 'bookings'; S.bookView = 'schedule'; S.day = today(); render(); window.scrollTo(0, 0); };
+A.tick = async d => {
+  const c = cl(), key = S.me + '|' + d.id, was = !!c.done[key];
+  if (was) delete c.done[key]; else c.done[key] = { at: nowHM(), by: S.me };
+  const mine = itemsFor(S.me), all = mine.length && mine.every(i => doneRec(S.me, i.id));
+  if (!was && all) { SFX.allDone(); toast('All done for today'); } else if (was) SFX.untick(); else SFX.tick();
+  render();
+  S.pending++;
+  try {
+    const res = await run('api_tick', S.code, d.id, S.me, !was, S.me);
+    if (--S.pending === 0) { S.data.checklist = res; saveCache(); render(); }
+  } catch (e) {
+    S.pending--;
+    if (was) c.done[key] = { at: '', by: S.me }; else delete c.done[key];
+    toast(e.message, true); render();
+  }
+};
+function viewTeam() {
+  const c = cl();
+  if (!c.workday) return '<div class="calm"><div class="label calm-hi">day off</div><p style="margin:6px 0 0">No checklists today.</p></div>';
+  const people = team().filter(p => itemsFor(p.name).length);
+  let h = people.map(p => {
+    const items = itemsFor(p.name), done = items.filter(i => doneRec(p.name, i.id)), open = items.filter(i => !doneRec(p.name, i.id));
+    const all = !open.length, pct = Math.round(done.length / items.length * 100);
+    const last = done.map(i => doneRec(p.name, i.id).at).filter(Boolean).sort().pop();
+    return '<div class="card' + (all ? ' calmcard' : '') + '"><div class="row" style="align-items:center"><span class="avatar">' + esc(p.name.slice(0, 2).toUpperCase()) + '</span>' +
+      '<span style="flex:1;min-width:0"><span class="title" style="display:block">' + esc(p.name) + '</span><span class="sub mono">' + esc((p.role || '').toLowerCase()) + '</span></span>' +
+      '<span class="mono count">' + done.length + '/' + items.length + '</span></div>' +
+      '<div class="bar" role="img" aria-label="' + pct + '% done"><i style="width:' + pct + '%"></i></div>' +
+      '<p class="openlist">' + (all ? 'All done for today' : 'Open: ' + esc(open.slice(0, 3).map(i => i.item).join(', ')) + (open.length > 3 ? ', +' + (open.length - 3) : '')) + '</p>' +
+      '<span class="sub mono">' + (last ? (all ? 'finished ' : 'last tick ') + esc(last) : 'nothing ticked yet') + '</span></div>';
+  }).join('');
+  if (!people.length) h = '<div class="empty">no checklists set up yet.</div>';
+  if (S.data.links) h += '<a class="btn wide" href="' + esc(S.data.links.checklist) + '" target="_blank" rel="noopener">' + ICON.sheet + 'Edit checklists in the sheet</a>' +
+    '<p class="whisper center">tick active to keep an item, untick to retire it. lists reset every workday.</p>';
+  return h;
+}
+
+/* ---------- bookings: schedule + requests ---------- */
+function viewBookings() {
+  const n = attention();
+  return '<h1 class="pagetitle">Bookings.</h1>' + seg('bookView', S.bookView, [['schedule', 'schedule'], ['requests', 'requests' + (n ? ' · ' + n : '')]], 'View') +
+    (S.bookView === 'requests' ? viewRequests() : viewSchedule());
+}
+A.bookView = d => { SFX.tap(); S.bookView = d.k; render(); };
+
+/* ---------- tasks ---------- */
+function taskKind(s) { s = String(s || '').toLowerCase(); if (/block/.test(s)) return 'blocked'; if (/complet|done|finish/.test(s)) return 'done'; if (/progress|doing|started/.test(s)) return 'doing'; return 'backlog'; }
+function prioKind(p) { p = String(p || '').toLowerCase(); if (/urgent|critical/.test(p)) return 'urgent'; if (/high/.test(p)) return 'high'; return 'low'; }
+function taskRank(t) { const d = t.due ? daysSince(t.due) : -999; return (prioKind(t.prio) === 'urgent' ? 0 : 10) + (d >= 0 ? 0 : 5) + (taskKind(t.status) === 'blocked' ? 2 : 0); }
+function dueInfo(t) {
+  if (taskKind(t.status) === 'done') return { label: t.completed ? 'done ' + nice(t.completed, { day: 'numeric', month: 'short' }).toLowerCase() : 'done', kind: '' };
+  if (!t.due) return { label: 'no deadline', kind: '' };
+  const d = daysSince(t.due);
+  if (d > 0) return { label: 'overdue ' + d + 'd', kind: 'over' };
+  if (d === 0) return { label: 'today', kind: 'soon' };
+  return { label: nice(t.due).toLowerCase(), kind: d >= -7 ? 'week' : '' };
+}
+function taskById(id) { return (S.data.tasks || []).find(t => t.id === id); }
+function taskCard(t) {
+  const pk = prioKind(t.prio), tk = taskKind(t.status), du = dueInfo(t), notes = parseNotes(t.notes);
+  return '<button class="card task' + (tk === 'done' ? ' isdone' : '') + '" data-a="openTask" data-id="' + esc(t.id) + '"><div class="pills" style="margin:0 0 8px">' +
+    '<span class="pill idchip">' + esc(t.id) + '</span>' + (t.prio ? '<span class="pill prio-' + pk + '">' + esc(t.prio.toLowerCase()) + '</span>' : '') +
+    '<span class="pill plain">' + esc((t.status || '').toLowerCase()) + '</span><span class="pill due-' + (du.kind || 'none') + '" style="margin-left:auto">' + esc(du.label) + '</span></div>' +
+    '<span class="title tt">' + esc(t.title) + '</span>' +
+    (tk === 'blocked' && t.blocker ? '<span class="blockline"><span class="mono calm-hi">blocked · </span>' + esc(t.blocker) + '</span>' : '') +
+    '<span class="ownerline"><span class="avatar sm">' + esc((t.owner || '?').slice(0, 2).toUpperCase()) + '</span><span>' + esc(t.owner || 'unassigned') + '</span>' +
+    (notes[0] ? '<span class="mono sub ell">' + esc(notes[0].when) + '</span>' : '') + '</span></button>';
+}
+function viewTasks() {
+  const all = S.data.tasks || [], open = all.filter(t => taskKind(t.status) !== 'done');
+  const sc = S.taskScope, fl = S.taskFilter;
+  const inScope = t => sc === 'done' ? taskKind(t.status) === 'done' : taskKind(t.status) !== 'done' && (sc === 'team' || t.owner === S.me);
+  const passes = t => fl === 'all' || (fl === 'urgent' && prioKind(t.prio) === 'urgent') || (fl === 'blocked' && taskKind(t.status) === 'blocked') ||
+    (fl === 'week' && t.due && daysSince(t.due) >= -7);
+  let list = all.filter(t => inScope(t) && passes(t));
+  list = sc === 'done' ? list.sort((a, b) => String(b.completed).localeCompare(String(a.completed))) : list.sort((a, b) => taskRank(a) - taskRank(b) || String(a.due || '9').localeCompare(String(b.due || '9')));
+  let h = '<h1 class="pagetitle">Studio tasks.</h1>';
+  h += seg('taskScope', sc, [['mine', 'mine · ' + open.filter(t => t.owner === S.me).length], ['team', 'team · ' + open.length], ['done', 'done · ' + (all.length - open.length)]], 'Whose tasks');
+  h += '<div class="seg" role="group" aria-label="Filter">' + [['all', 'all'], ['urgent', 'urgent'], ['blocked', 'blocked'], ['week', 'this week']].map(([k, l]) =>
+    '<button data-a="taskFilter" data-k="' + k + '" aria-pressed="' + (fl === k) + '">' + l + '</button>').join('') + '</div>';
+  h += list.length ? list.map(taskCard).join('') : '<div class="empty">nothing here. nice.</div>';
+  if (S.data.links) h += '<p class="whisper center"><a href="' + esc(S.data.links.tasks) + '" target="_blank" rel="noopener">open the main task pipeline in the sheet</a></p>';
+  return h;
+}
+A.taskScope = d => { SFX.tap(); S.taskScope = d.k; render(); };
+A.taskFilter = d => { SFX.tap(); S.taskFilter = d.k; render(); };
+function parseNotes(n) {
+  return String(n || '').split(/\n+/).map(l => l.trim()).filter(Boolean).map(l => {
+    const m = l.match(/^(\d{4}-\d{2}-\d{2})\s*·\s*([^:]{1,40}):\s*(.*)$/);
+    return m ? { when: nice(m[1], { day: 'numeric', month: 'short' }).toLowerCase() + ' · ' + m[2].trim().toLowerCase(), text: m[3] } : { when: '', text: l };
+  });
+}
+A.openTask = d => {
+  const t = taskById(d.id); if (!t) return;
+  const L = S.data.taskLists || { status: [], prio: [] }, tk = taskKind(t.status), du = dueInfo(t);
+  let h = '<div class="pills" style="margin:0 0 10px"><span class="pill idchip">' + esc(t.id) + '</span>' + (t.prio ? '<span class="pill prio-' + prioKind(t.prio) + '">' + esc(t.prio.toLowerCase()) + '</span>' : '') +
+    '<span class="pill due-' + (du.kind || 'none') + '">' + esc(du.label) + '</span></div>' +
+    '<h2 class="tasktitle">' + esc(t.title) + '</h2>';
+  h += '<div class="label">status</div><div class="statusgrid">' + L.status.map(s =>
+    '<button data-a="taskStatus" data-id="' + esc(t.id) + '" data-v="' + esc(s) + '" aria-pressed="' + (S.blocking === t.id ? taskKind(s) === 'blocked' : s === t.status) + '">' + esc(s.toLowerCase()) + '</button>').join('') + '</div>';
+  if (S.blocking === t.id) {
+    const bs = L.status.find(s => taskKind(s) === 'blocked') || 'Blocked';
+    h += '<div class="calm" style="margin-top:10px"><label class="label calm-hi" for="tBlock">what is it waiting for?</label>' +
+      '<input id="tBlock" class="input calm-input" value="' + esc(t.blocker) + '" placeholder="e.g. waiting for the supplier">' +
+      '<button class="btn primary wide" style="margin-top:8px" data-a="confirmBlock" data-id="' + esc(t.id) + '" data-v="' + esc(bs) + '">Mark blocked</button>' +
+      '<span class="label calm-mut">also added to the blockers & new tasks tab</span></div>';
+  } else if (tk === 'blocked' && t.blocker) {
+    h += '<div class="calm" style="margin-top:10px"><span class="label calm-hi">blocked · waiting for</span><p style="margin:6px 0 0">' + esc(t.blocker) + '</p></div>';
+  }
+  h += '<dl class="facts"><div><dt>owner</dt><dd>' + esc(t.owner || '—') + '</dd></div><div><dt>due</dt><dd>' + (t.due ? esc(nice(t.due, { weekday: 'short', day: 'numeric', month: 'short' })) : '—') + '</dd></div>' +
+    '<div><dt>created</dt><dd>' + (t.created ? esc(nice(t.created, { day: 'numeric', month: 'short' })) : '—') + '</dd></div><div><dt>completed</dt><dd>' + (t.completed ? esc(nice(t.completed, { day: 'numeric', month: 'short' })) : '—') + '</dd></div></dl>';
+  if (t.desc) h += '<div class="label">description</div><p class="desc">' + esc(t.desc) + '</p>';
+  h += '<h3>Updates</h3>' + (parseNotes(t.notes).map(n => '<div class="upd"><span class="label">' + esc(n.when) + '</span><span>' + esc(n.text) + '</span></div>').join('') || '<p class="muted">No updates yet.</p>');
+  h += '<label class="label" for="tNote" style="display:block;margin-top:12px">add an update</label><div class="inrow"><input id="tNote" class="input" placeholder="what changed?"><button class="btn primary" data-a="taskNote" data-id="' + esc(t.id) + '">Post</button></div>';
+  h += '<button class="btn wide" style="margin-top:14px" data-a="editTask" data-id="' + esc(t.id) + '">Edit task</button>';
+  sheet(t.id, h);
+};
+A.taskStatus = async d => {
+  const t = taskById(d.id);
+  if (taskKind(d.v) === 'blocked') { S.blocking = d.id; SFX.tap(); A.openTask({ id: d.id }); setTimeout(() => { const i = document.getElementById('tBlock'); if (i) i.focus(); }, 60); return; }
+  if (t && d.v === t.status && S.blocking !== d.id) return;
+  await setTaskStatus(d.id, d.v, '');
+};
+A.confirmBlock = async d => {
+  const reason = (document.getElementById('tBlock') || {}).value || '';
+  if (!reason.trim()) return toast('Say what it is waiting for', true);
+  await setTaskStatus(d.id, d.v, reason.trim());
+};
+async function setTaskStatus(id, status, reason) {
+  document.querySelectorAll('.statusgrid button').forEach(b => b.disabled = true);
+  try {
+    setData(await run('api_setTaskStatus', S.code, id, status, reason, S.me));
+    S.blocking = null;
+    taskKind(status) === 'done' ? SFX.allDone() : SFX.status();
+    render(); A.openTask({ id: id }); toast(status);
+  } catch (e) { toast(e.message, true); document.querySelectorAll('.statusgrid button').forEach(b => b.disabled = false); }
+}
+A.taskNote = async d => {
+  const inp = document.getElementById('tNote'), text = inp.value.trim();
+  if (!text) return toast('Write an update first', true);
+  inp.disabled = true;
+  try { setData(await run('api_addTaskNote', S.code, d.id, text, S.me)); SFX.tick(); render(); A.openTask({ id: d.id }); toast('Update posted'); }
+  catch (e) { inp.disabled = false; toast(e.message, true); }
+};
+A.newTask = () => openTaskForm({ owner: S.me });
+A.editTask = d => openTaskForm(Object.assign({}, taskById(d.id)));
+function openTaskForm(t) {
+  const L = S.data.taskLists || { status: [], prio: [], owner: [] }, editing = !!t.id;
+  const opt = (list, cur, blank) => (blank ? '<option value="">' + blank + '</option>' : '') + list.map(v => '<option' + (v === cur ? ' selected' : '') + '>' + esc(v) + '</option>').join('');
+  const prioDefault = L.prio.find(p => /high/i.test(p)) || L.prio[0];
+  const h = '<div class="field"><label class="label" for="kTitle">task</label><input id="kTitle" class="input" value="' + esc(t.title || '') + '" placeholder="e.g. Order nitrile gloves (M)"></div>' +
+    '<div class="field"><label class="label" for="kDesc">details</label><textarea id="kDesc" class="input" placeholder="optional">' + esc(t.desc || '') + '</textarea></div>' +
+    '<div class="grid2"><div class="field"><label class="label" for="kOwner">owner</label><select id="kOwner" class="input">' + opt(L.owner, t.owner, 'unassigned') + '</select></div>' +
+    '<div class="field"><label class="label" for="kDue">due</label><input id="kDue" type="date" class="input" value="' + esc(t.due || '') + '"></div></div>' +
+    '<div class="grid2"><div class="field"><label class="label" for="kPrio">priority</label><select id="kPrio" class="input">' + opt(L.prio, t.prio || prioDefault) + '</select></div>' +
+    (editing ? '' : '<div class="field"><label class="label" for="kStatus">status</label><select id="kStatus" class="input">' + opt(L.status.filter(s => taskKind(s) !== 'blocked' && taskKind(s) !== 'done'), L.status[0]) + '</select></div>') + '</div>' +
+    '<button class="btn primary wide" id="kSave" data-a="saveTask" data-id="' + esc(t.id || '') + '">' + (editing ? 'Save changes' : 'Add task') + '</button>' +
+    '<p class="whisper center">saved to the main task pipeline tab.</p>';
+  sheet(editing ? 'Edit ' + t.id : 'New task', h, () => setTimeout(() => { const i = document.getElementById('kTitle'); if (i && !editing) i.focus(); }, 60));
+}
+A.saveTask = async d => {
+  const g = id => { const e = document.getElementById(id); return e ? e.value.trim() : ''; };
+  const t = { id: d.id || '', title: g('kTitle'), desc: g('kDesc'), owner: g('kOwner'), due: g('kDue'), prio: g('kPrio'), status: g('kStatus') };
+  if (!t.title) return toast('Give the task a name', true);
+  const btn = document.getElementById('kSave'); btn.disabled = true; btn.innerHTML = '<span class="spin"></span>';
+  try {
+    const res = await run('api_saveTask', S.code, t, S.me);
+    setData(res.data); SFX.save(); S.tab = 'tasks'; render(); A.openTask({ id: res.id }); toast(d.id ? 'Saved' : 'Added · ' + res.id);
+  } catch (e) { toast(e.message, true); btn.disabled = false; btn.textContent = d.id ? 'Save changes' : 'Add task'; }
+};
+/* ---------- schedule ---------- */
+function bookingCard(b) {
+  const sk = statusKind(b.status), pk = payKind(b.payment), soon = b.date >= today() && daysSince(b.date) >= -3;
+  const c = clientFor(b);
+  return '<button class="card" data-a="openBooking" data-id="' + esc(b.id) + '"><div class="row"><div class="time">' + esc(b.start || '—') + '</div>' +
+    '<div style="flex:1"><div class="title">' + esc(b.client) + '</div><div class="sub">' + esc(b.placement || 'No placement yet') + '</div>' +
+    '<div class="pills"><span class="pill">' + (b.hours || 0) + 'h' + (b.artist ? ' · ' + esc(b.artist.split(' ')[0]) : '') + '</span>' +
+    '<span class="pill ' + (sk === 'done' ? 'ok' : sk === 'cancelled' ? 'off' : sk === 'noshow' ? 'warn' : '') + '">' + esc(b.status || '—') + '</span>' +
+    '<span class="pill ' + (pk === 'paid' ? 'ok' : pk === 'unpaid' && soon && sk === 'active' ? 'warn' : '') + '">' + esc(b.payment || 'Unpaid') + '</span>' +
+    (c && c.sens ? '<span class="pill warn">Notes</span>' : '') + '</div></div></div></button>';
+}
+function viewSchedule() {
+  const all = bookings(), t = today();
+  const days = []; for (let i = -1; i < 27; i++) days.push(addDays(t, i));
+  const count = d => all.filter(b => b.date === d && statusKind(b.status) !== 'cancelled').length;
+  const list = all.filter(b => b.date === S.day).sort(byStart);
+  const upcoming = all.filter(b => b.date >= t && statusKind(b.status) === 'active');
+  const noDeposit = upcoming.filter(b => payKind(b.payment) === 'unpaid');
+  let h = '<div class="days" role="group" aria-label="Pick a day">' + days.map(d => {
+    const n = Math.min(count(d), 4);
+    return '<button class="day" data-a="pickDay" data-d="' + d + '" aria-pressed="' + (d === S.day) + '" aria-label="' + nice(d, { weekday: 'long', day: 'numeric', month: 'long' }) + ', ' + count(d) + ' bookings">' +
+      '<span class="w">' + (d === t ? 'Today' : pd(d).toLocaleDateString('en-GB', { weekday: 'short' })) + '</span><span class="d">' + pd(d).getDate() + '</span>' +
+      '<span class="dots">' + '<i></i>'.repeat(n) + '</span></button>';
+  }).join('') + '</div>';
+  h += '<h2>' + (S.day === t ? 'Today' : nice(S.day, { weekday: 'long', day: 'numeric', month: 'long' })) + '</h2>';
+  h += list.length ? list.map(bookingCard).join('') : '<div class="empty">nothing booked.<br>tap + book to add one.</div>';
+  if (noDeposit.length) {
+    h += '<h3>No deposit yet <span class="pill warn">' + noDeposit.length + '</span></h3>' + noDeposit.sort(byStart).slice(0, 8).map(b =>
+      '<button class="card" data-a="openBooking" data-id="' + esc(b.id) + '"><div class="row"><div><div class="title">' + esc(b.client) + '</div><div class="sub">' + nice(b.date) + (b.start ? ' · ' + esc(b.start) : '') + '</div></div><span class="pill warn">' + rp(b.deposit) + '</span></div></button>').join('');
+  }
+  const next = upcoming.filter(b => b.date > S.day).sort(byStart).slice(0, 5);
+  if (next.length) h += '<h3>Coming up</h3>' + next.map(b => '<button class="card" data-a="openBooking" data-id="' + esc(b.id) + '"><div class="row"><div><div class="title">' + esc(b.client) + '</div><div class="sub">' + nice(b.date) + (b.start ? ' · ' + esc(b.start) : '') + ' · ' + (b.hours || 0) + 'h</div></div><span class="label">' + esc(b.id) + '</span></div></button>').join('');
+  return h;
+}
+A.pickDay = d => { S.day = d.d; render(); };
+
+/* ---------- booking detail ---------- */
+function sheet(title, inner, onReady) {
+  const L = document.getElementById('layer');
+  L.innerHTML = '<div class="scrim" data-a="closeSheetBg"><div class="sheet" role="dialog" aria-modal="true" aria-label="' + esc(title) + '"><div class="head"><h2>' + esc(title) + '</h2><button class="iconbtn" data-a="closeSheet" aria-label="Close">' + ICON.close + '</button></div>' + inner + '</div></div>';
+  document.body.style.overflow = 'hidden';
+  if (onReady) onReady(L.querySelector('.sheet'));
+}
+A.closeSheet = () => { const had = document.getElementById('layer').innerHTML; document.getElementById('layer').innerHTML = ''; document.body.style.overflow = ''; if (had && S.tab === 'quote' && S.data) render(); };
+A.closeSheetBg = (d, el, e) => { if (e.target === el) A.closeSheet(); };
+
+function contactButtons(phone, handle, email, waText) {
+  const p = phoneLink(phone), h = handleOf(handle);
+  let out = '';
+  if (p) out += '<a class="btn" target="_blank" rel="noopener" href="https://wa.me/' + p + (waText ? '?text=' + encodeURIComponent(waText) : '') + '">' + ICON.wa + 'WhatsApp</a>';
+  if (h) out += '<a class="btn" target="_blank" rel="noopener" href="https://instagram.com/' + encodeURIComponent(h) + '">' + ICON.ig + 'Instagram</a>';
+  if (email) out += '<a class="btn" target="_blank" rel="noopener" href="mailto:' + esc(email) + '">' + ICON.mail + 'Email</a>';
+  return out;
+}
+function confirmText(b) {
+  const tpl = S.data.settings.confirmMsg || 'Hi {name}! Your session at KRIYĀ is confirmed for {date} at {time}.';
+  return tpl.replace(/\{name\}/g, String(b.client).split(' ')[0]).replace(/\{date\}/g, nice(b.date, { weekday: 'long', day: 'numeric', month: 'long' }))
+    .replace(/\{time\}/g, b.start || '').replace(/\{artist\}/g, b.artist || '');
+}
+A.openBooking = d => {
+  const b = bookings().find(x => x.id === d.id); if (!b) return;
+  const c = clientFor(b), L = S.data.lists;
+  const chips = (field, list, cur) => '<div class="seg" role="group" aria-label="' + field + '">' + list.map(v =>
+    '<button data-a="setField" data-id="' + esc(b.id) + '" data-f="' + field + '" data-v="' + esc(v) + '" aria-pressed="' + (v === cur) + '">' + esc(v) + '</button>').join('') + '</div>';
+  let h = '<dl class="kv"><dt>When</dt><dd>' + nice(b.date, { weekday: 'long', day: 'numeric', month: 'long' }) + (b.start ? ' · ' + esc(b.start) : '') + ' · ' + (b.hours || 0) + 'h</dd>' +
+    '<dt>Artist</dt><dd>' + esc(b.artist || '—') + '</dd><dt>Sales rep</dt><dd>' + esc(b.rep || '—') + '</dd>' +
+    '<dt>Placement</dt><dd>' + esc(b.placement || '—') + '</dd>' +
+    '<dt>Value</dt><dd class="mono">' + rp(b.value) + ' <span class="muted">· comm. ' + rp(b.commission) + '</span></dd>' +
+    '<dt>Deposit</dt><dd class="mono">' + rp(b.deposit) + '</dd><dt>Booking</dt><dd class="mono muted">' + esc(b.id) + '</dd></dl>';
+  if (c && c.sens) h += '<div class="callout"><div class="label">Sensitivities & placement</div><div style="margin-top:6px">' + esc(c.sens) + '</div></div>';
+  h += '<div class="actions">' + contactButtons(b.phone || (c && c.phone), b.handle || (c && c.handle), '', confirmText(b)) +
+    '<button class="btn" data-a="editBooking" data-id="' + esc(b.id) + '">Edit booking</button></div>';
+  h += '<div class="label">Status</div>' + chips('status', L.status, b.status);
+  h += '<div class="label">Payment</div>' + chips('payment', L.payment, b.payment);
+  h += '<div class="field"><label class="label" for="bNotes">Notes</label><textarea id="bNotes" class="input">' + esc(b.notes) + '</textarea></div>' +
+    '<button class="btn wide" data-a="saveNotes" data-id="' + esc(b.id) + '">Save notes</button>';
+  h += '<h3>References</h3><div id="refs" class="thumbs"></div><label class="btn wide" style="margin-top:6px">' + ICON.cam + 'Add photo<input type="file" accept="image/*" multiple class="sr" id="addPhoto"></label>';
+  if (b.updated) h += '<p class="muted" style="font-size:13px;margin-top:16px">Last change ' + esc(b.updated) + '</p>';
+  sheet(b.client, h, el => {
+    loadRefs(b.folder, el.querySelector('#refs'));
+    el.querySelector('#addPhoto').onchange = async e => {
+      const files = [...e.target.files].slice(0, 6); if (!files.length) return;
+      toast('Uploading ' + files.length + '…');
+      let folder = b.folder;
+      try {
+        for (const f of files) folder = await run('api_uploadBookingImage', S.code, b.id, b.client, folder, f.name, await shrink(f));
+        b.folder = folder; await refresh(true); A.openBooking({ id: b.id }); toast('Photo saved');
+      } catch (err) { toast(err.message, true); }
+    };
+  });
+};
+async function loadRefs(folder, box) {
+  if (!box) return;
+  if (!folder) { box.outerHTML = '<p class="muted" id="refs">No references yet.</p>'; return; }
+  box.innerHTML = '<div><span class="spin"></span></div>';
+  try {
+    const imgs = await run('api_images', S.code, folder);
+    box.innerHTML = imgs.length ? imgs.map(i => '<a href="' + esc(i.url) + '" target="_blank" rel="noopener">' + (i.src ? '<img alt="' + esc(i.name) + '" src="' + i.src + '">' : esc(i.name)) + '</a>').join('')
+      : '<div class="muted" style="font-size:13px">Empty</div>';
+  } catch (e) { box.innerHTML = '<div class="muted" style="font-size:13px">Could not load</div>'; }
+}
+A.setField = async d => {
+  const btns = document.querySelectorAll('[data-f="' + d.f + '"]'); btns.forEach(b => b.setAttribute('aria-pressed', b.dataset.v === d.v));
+  try { setData(await run('api_setBookingField', S.code, d.id, d.f, d.v, S.me)); SFX.status(); render(); toast(d.v); }
+  catch (e) { toast(e.message, true); }
+};
+A.saveNotes = async d => {
+  try { setData(await run('api_setBookingField', S.code, d.id, 'notes', document.getElementById('bNotes').value, S.me)); render(); toast('Notes saved'); }
+  catch (e) { toast(e.message, true); }
+};
+
+/* ---------- booking form ---------- */
+function slots() {
+  const o = mins(S.data.settings.open) ?? 600, c = mins(S.data.settings.close) ?? 1200, out = [];
+  for (let m = o; m <= c; m += 30) out.push(String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0'));
+  return out;
+}
+A.newBooking = d => openForm({ date: S.tab === 'bookings' ? S.day : today(), clientId: d && d.client || '' });
+A.editBooking = d => openForm(Object.assign({}, bookings().find(x => x.id === d.id)));
+function openForm(b) {
+  const st = S.data.settings, L = S.data.lists, artists = S.data.artists || [], reps = S.data.reps || [];
+  const editing = !!b.id;
+  const F = { client: b.client || '', clientId: b.clientId || '', phone: b.phone || '', handle: b.handle || '', hours: b.hours || 2, queued: [] };
+  if (F.clientId && !F.client) { const c = clientById(F.clientId); if (c) Object.assign(F, { client: c.name, phone: c.phone, handle: c.handle }); }
+  const opt = (list, cur, blank) => (blank ? '<option value="">' + blank + '</option>' : '') + list.map(v => '<option' + (v === cur ? ' selected' : '') + '>' + esc(v) + '</option>').join('');
+  const me = S.me;
+  const h = '<div id="clientBox"></div>' +
+    '<div class="grid2"><div class="field"><label class="label" for="fDate">Date</label><input id="fDate" type="date" class="input" value="' + esc(b.date || today()) + '"></div>' +
+    '<div class="field"><label class="label" for="fStart">Start</label><select id="fStart" class="input">' + opt(slots(), b.start || '', 'Pick time') + '</select></div></div>' +
+    '<div class="grid2"><div class="field"><span class="label" style="display:block;margin-bottom:6px">Hours</span><div class="stepper"><button type="button" data-a="hrs" data-v="-0.5" aria-label="Less time">−</button><span id="fHours">' + F.hours + 'h</span><button type="button" data-a="hrs" data-v="0.5" aria-label="More time">+</button></div></div>' +
+    '<div class="field"><label class="label" for="fArtist">Artist</label><select id="fArtist" class="input">' + opt(artists, b.artist || (artists.indexOf(me) >= 0 ? me : artists[0]), '') + '</select></div></div>' +
+    '<div id="clash"></div>' +
+    '<div class="field"><label class="label" for="fPlace">Placement & style</label><input id="fPlace" class="input" placeholder="Forearm · fineline botanical" value="' + esc(b.placement || '') + '"></div>' +
+    '<div class="field"><label class="label" for="fRep">Sales rep</label><select id="fRep" class="input">' + opt(reps, b.rep || (reps.indexOf(me) >= 0 ? me : ''), 'No rep') + '</select></div>' +
+    '<div class="grid2"><div class="field"><label class="label" for="fValue">Value (Rp)</label><input id="fValue" class="input mono" inputmode="numeric" value="' + (editing || b.value ? (b.value || '') : '') + '" placeholder=""></div>' +
+    '<div class="field"><label class="label" for="fDeposit">Deposit (Rp)</label><input id="fDeposit" class="input mono" inputmode="numeric" value="' + (editing ? (b.deposit || 0) : (st.deposit || 0)) + '"></div></div>' +
+    '<p class="muted" id="valHint" style="font-size:13px;margin:-6px 0 14px"></p>' +
+    '<div class="grid2"><div class="field"><label class="label" for="fPay">Payment</label><select id="fPay" class="input">' + opt(L.payment, b.payment || L.payment[0]) + '</select></div>' +
+    '<div class="field"><label class="label" for="fStatus">Status</label><select id="fStatus" class="input">' + opt(L.status, b.status || L.status[0]) + '</select></div></div>' +
+    '<div class="field"><label class="label" for="fNotes">Notes</label><textarea id="fNotes" class="input">' + esc(b.notes || '') + '</textarea></div>' +
+    (editing ? '' : '<label class="btn wide" style="margin-bottom:12px">' + ICON.cam + '<span id="qLabel">Add reference photos</span><input type="file" accept="image/*" multiple class="sr" id="fPhotos"></label>') +
+    '<button class="btn primary wide" id="fSave" data-a="saveBooking">' + (editing ? 'Save changes' : 'Create booking') + '</button>';
+  sheet(editing ? 'Edit ' + b.id : 'New booking', h, el => {
+    S.form = { b: b, F: F };
+    drawClient();
+    const upd = () => { checkClash(); valueHint(); };
+    ['fDate', 'fStart', 'fArtist'].forEach(id => el.querySelector('#' + id).onchange = upd);
+    el.querySelector('#fValue').oninput = valueHint;
+    const ph = el.querySelector('#fPhotos');
+    if (ph) ph.onchange = e => { F.queued = [...e.target.files].slice(0, 6); el.querySelector('#qLabel').textContent = F.queued.length + ' photo' + (F.queued.length === 1 ? '' : 's') + ' ready'; };
+    upd();
+  });
+}
+function drawClient() {
+  const F = S.form.F, box = document.getElementById('clientBox');
+  if (F.client && (F.clientId || F.isNew)) {
+    const c = clientById(F.clientId);
+    box.innerHTML = '<div class="field"><span class="label" style="display:block;margin-bottom:6px">Client</span><div class="chosen"><div><div class="title">' + esc(F.client) + '</div><div class="sub">' +
+      (F.isNew ? 'New client · added to the CRM' : esc([c && c.handle, c && c.sessions ? c.sessions + ' sessions' : ''].filter(Boolean).join(' · '))) + '</div></div>' +
+      '<button type="button" class="iconbtn" data-a="clearClient" aria-label="Change client">' + ICON.close + '</button></div></div>' +
+      (c && c.sens ? '<div class="callout"><div class="label">Sensitivities & placement</div><div style="margin-top:6px">' + esc(c.sens) + '</div></div>' : '') +
+      '<div class="grid2"><div class="field"><label class="label" for="fPhone">WhatsApp</label><input id="fPhone" class="input" inputmode="tel" value="' + esc(F.phone) + '" placeholder="0812…"></div>' +
+      '<div class="field"><label class="label" for="fHandle">Instagram</label><input id="fHandle" class="input" value="' + esc(F.handle) + '" placeholder="@handle"></div></div>';
+    return;
+  }
+  box.innerHTML = '<div class="field"><label class="label" for="fClient">Client</label><input id="fClient" class="input" autocomplete="off" placeholder="Search or type a new name" value="' + esc(F.client) + '"><div id="sugg"></div></div>';
+  const inp = document.getElementById('fClient');
+  const draw = () => {
+    const q = inp.value.trim().toLowerCase(); F.client = inp.value.trim();
+    const hits = q ? (S.data.clients || []).filter(c => (c.name + ' ' + c.handle + ' ' + c.phone).toLowerCase().includes(q)).slice(0, 5) : [];
+    document.getElementById('sugg').innerHTML = q ? '<div class="suggest">' + hits.map(c => '<button type="button" data-a="pickClient" data-id="' + esc(c.id) + '"><b>' + esc(c.name) + '</b> <span class="muted">' + esc(c.handle) + '</span></button>').join('') +
+      (hits.some(c => c.name.toLowerCase() === q) ? '' : '<button type="button" data-a="newClient">+ New client “' + esc(inp.value.trim()) + '”</button>') + '</div>' : '';
+  };
+  inp.oninput = draw; draw();
+}
+A.pickClient = d => { const c = clientById(d.id), F = S.form.F; Object.assign(F, { client: c.name, clientId: c.id, phone: c.phone, handle: c.handle, isNew: false }); drawClient(); };
+A.newClient = () => { const F = S.form.F; F.isNew = true; F.clientId = ''; drawClient(); };
+A.clearClient = () => { const F = S.form.F; Object.assign(F, { client: '', clientId: '', phone: '', handle: '', isNew: false }); drawClient(); setTimeout(() => document.getElementById('fClient').focus(), 30); };
+A.hrs = d => { const F = S.form.F; F.hours = Math.min(12, Math.max(0.5, F.hours + Number(d.v))); document.getElementById('fHours').textContent = F.hours + 'h'; checkClash(); valueHint(); };
+function valueHint() {
+  const F = S.form.F, st = S.data.settings, v = document.getElementById('fValue');
+  const auto = F.hours * st.rate, val = v.value.trim() ? Number(v.value.replace(/\D/g, '')) : auto;
+  v.placeholder = String(auto);
+  document.getElementById('valHint').textContent = (v.value.trim() ? 'Custom price' : F.hours + 'h × ' + rp(st.rate)) + ' · commission ' + rp(val * st.commissionRate);
+}
+function checkClash() {
+  const F = S.form.F, date = document.getElementById('fDate').value, start = mins(document.getElementById('fStart').value), artist = document.getElementById('fArtist').value;
+  const box = document.getElementById('clash');
+  if (start == null) { box.innerHTML = ''; return; }
+  const end = start + F.hours * 60;
+  const hits = bookings().filter(x => x.id !== S.form.b.id && x.date === date && statusKind(x.status) !== 'cancelled' && (!artist || !x.artist || x.artist === artist) && mins(x.start) != null &&
+    mins(x.start) < end && mins(x.start) + (x.hours || 1) * 60 > start);
+  box.innerHTML = hits.length ? '<div class="callout" role="alert"><div class="label">Overlaps</div><div style="margin-top:6px">' + hits.map(x => esc(x.start + ' ' + x.client + ' (' + x.hours + 'h' + (x.artist ? ', ' + x.artist : '') + ')')).join('<br>') + '</div></div>' : '';
+}
+A.saveBooking = async () => {
+  const F = S.form.F, b = S.form.b, g = id => { const e = document.getElementById(id); return e ? e.value.trim() : ''; };
+  if (!F.client) return toast('Pick or add a client', true);
+  if (!F.clientId && !F.isNew) { const hit = (S.data.clients || []).find(c => c.name.toLowerCase() === F.client.toLowerCase()); if (hit) F.clientId = hit.id; else F.isNew = true; }
+  const payload = {
+    id: b.id || '', client: F.client, clientId: F.clientId, phone: g('fPhone') || F.phone, handle: g('fHandle') || F.handle,
+    date: g('fDate'), start: g('fStart'), hours: F.hours, artist: g('fArtist'), placement: g('fPlace'), rep: g('fRep'),
+    value: g('fValue') ? Number(g('fValue').replace(/\D/g, '')) : '', deposit: Number(g('fDeposit').replace(/\D/g, '')) || 0,
+    payment: g('fPay'), status: g('fStatus'), notes: g('fNotes'), requestId: b.requestId || '', folder: b.folder || '', source: b.source || '', quoteId: b.quoteId || '', sens: b.sens || ''
+  };
+  if (!payload.date) return toast('Pick a date', true);
+  if (document.querySelector('#clash .callout') && !confirm('This overlaps another booking. Save anyway?')) return;
+  const btn = document.getElementById('fSave'); btn.disabled = true; btn.innerHTML = '<span class="spin"></span>';
+  try {
+    const res = await run('api_saveBooking', S.code, payload, S.me);
+    setData(res.data);
+    if (F.queued.length) {
+      toast('Uploading photos…'); let folder = payload.folder;
+      for (const f of F.queued) folder = await run('api_uploadBookingImage', S.code, res.id, payload.client, folder, f.name, await shrink(f));
+      await refresh(true);
+    }
+    if (payload.quoteId && S.walk && S.walk.quoteId === payload.quoteId) S.walk = null;
+    S.tab = 'bookings'; S.bookView = 'schedule'; S.day = payload.date; A.closeSheet(); SFX.save(); render(); toast(b.id ? 'Saved' : 'Booked · ' + res.id);
+  } catch (e) { toast(e.message, true); btn.disabled = false; btn.textContent = b.id ? 'Save changes' : 'Create booking'; }
+};
+function shrink(file) {
+  return new Promise((ok, bad) => {
+    const img = new Image(), url = URL.createObjectURL(file);
+    img.onload = () => {
+      const k = Math.min(1, 1600 / Math.max(img.width, img.height)), c = document.createElement('canvas');
+      c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height); URL.revokeObjectURL(url);
+      ok(c.toDataURL('image/jpeg', 0.82));
+    };
+    img.onerror = () => bad(new Error('Could not read that image'));
+    img.src = url;
+  });
+}
+
+/* ---------- requests ---------- */
+function viewRequests() {
+  const all = S.data.requests || [], f = S.reqFilter;
+  const isOffer = r => { const q = quoteFor(r.id); return q && q.status === 'Offer received' && !q.expired; };
+  const list = f === 'All' ? all : f === 'Offers' ? all.filter(isOffer) : all.filter(r => (r.status || 'New') === f);
+  const n = k => k === 'Offers' ? all.filter(isOffer).length : all.filter(r => (r.status || 'New') === k).length;
+  const keys = (n('Offers') ? ['Offers'] : []).concat(['New', 'Contacted', 'Booked', 'All']);
+  let h = '<div class="seg" role="group" aria-label="Filter">' + keys.map(k =>
+    '<button data-a="reqFilter" data-k="' + k + '" aria-pressed="' + (f === k) + '">' + k + (k !== 'All' ? ' <span class="mono">' + n(k) + '</span>' : '') + '</button>').join('') + '</div>';
+  h += list.length ? list.map(r => '<button class="card" data-a="openRequest" data-id="' + esc(r.id) + '"><div class="row"><div style="flex:1"><div class="title">' + esc(r.name) + '</div>' +
+    '<div class="sub">' + esc(String(r.idea).slice(0, 110)) + (String(r.idea).length > 110 ? '…' : '') + '</div>' +
+    '<div class="pills">' + [r.placement, r.size, r.style].filter(Boolean).map(x => '<span class="pill">' + esc(x) + '</span>').join('') +
+    (r.folder ? '<span class="pill ok">Refs</span>' : '') + quotePill(r) + '</div></div><span class="label">' + esc(String(r.received).slice(5, 10)) + '</span></div></button>').join('')
+    : '<div class="empty">no ' + (f === 'All' ? '' : f.toLowerCase() + ' ') + 'requests.<br>request link goes in your bio.</div>';
+  return h;
+}
+A.reqFilter = d => { S.reqFilter = d.k; render(); };
+A.openRequest = d => {
+  const r = (S.data.requests || []).find(x => x.id === d.id); if (!r) return;
+  let h = '<dl class="kv"><dt>Received</dt><dd>' + esc(r.received) + '</dd><dt>Idea</dt><dd style="white-space:pre-wrap">' + esc(r.idea) + '</dd>' +
+    ['placement:Placement', 'size:Size', 'style:Style', 'colour:Colour', 'dates:Dates', 'budget:Budget', 'first:First tattoo'].map(p => { const [k, l] = p.split(':'); return r[k] ? '<dt>' + l + '</dt><dd>' + esc(r[k]) + '</dd>' : ''; }).join('') + '</dl>';
+  if (r.guide) h += '<div class="note"><span class="label">guide price the client saw</span>' + esc(r.guide) + '</div>';
+  if (r.sens) h += '<div class="callout"><div class="label">Allergies & sensitivities</div><div style="margin-top:6px">' + esc(r.sens) + '</div></div>';
+  h += '<div class="actions">' + contactButtons(r.phone, r.handle, r.email, 'Hi ' + String(r.name).split(' ')[0] + ', thanks for your request at KRIYĀ! ') + '</div>';
+  h += '<h3>References</h3><div id="refs" class="thumbs"></div>';
+  h += '<div class="label" style="margin-top:14px">Status</div><div class="seg">' + S.data.lists.requestStatus.map(v => '<button data-a="reqStatus" data-id="' + esc(r.id) + '" data-v="' + v + '" aria-pressed="' + (r.status === v) + '">' + v + '</button>').join('') + '</div>';
+  h += '<div class="field"><label class="label" for="rNotes">Studio notes</label><textarea id="rNotes" class="input">' + esc(r.notes) + '</textarea></div><button class="btn wide" data-a="reqNotes" data-id="' + esc(r.id) + '">Save notes</button>';
+  h = h.replace('<h3>References</h3>', quoteBlock(r) + '<h3>References</h3>');
+  sheet(r.name, h, el => loadRefs(r.folder, el.querySelector('#refs')));
+};
+A.reqStatus = async d => { try { setData(await run('api_updateRequest', S.code, d.id, { status: d.v })); SFX.status(); render(); A.openRequest({ id: d.id }); toast(d.v); } catch (e) { toast(e.message, true); } };
+A.reqNotes = async d => { try { setData(await run('api_updateRequest', S.code, d.id, { notes: document.getElementById('rNotes').value })); render(); toast('Notes saved'); } catch (e) { toast(e.message, true); } };
+A.bookRequest = d => bookFrom(d.id, {});
+function bookFrom(reqId, o) {
+  const r = (S.data.requests || []).find(x => x.id === reqId);
+  if (!r) return toast('Request not found', true);
+  const hit = (S.data.clients || []).find(c => c.name.toLowerCase() === String(r.name).toLowerCase() || (r.handle && handleOf(c.handle).toLowerCase() === handleOf(r.handle).toLowerCase()));
+  openForm({
+    client: hit ? hit.name : r.name, clientId: hit ? hit.id : '', phone: r.phone || (hit && hit.phone) || '', handle: r.handle || (hit && hit.handle) || '',
+    placement: [r.placement, r.style].filter(Boolean).join(' · '), notes: (o.extra ? o.extra + '\n' : '') + r.idea + (r.sens ? '\nSensitivities: ' + r.sens : ''),
+    requestId: r.id, folder: r.folder, source: 'Request', date: today(), value: o.value || '', hours: o.hours || 2, quoteId: o.quoteId || ''
+  });
+  if (!hit) { S.form.F.isNew = true; drawClient(); }
+}
+
+/* ---------- quotes: calculator + client offers ---------- */
+function PR() { return (S.data && S.data.pricing) || { rate: 1000000, cph: 9, mults: [1, 1.5, 2, 2.5], names: ['Minimal line', 'Detailed line', 'Shading', 'Solid / red fill'], tricky: 0.25, range: 0.15, maxSession: 5, deposit: 500000, validDays: 7 }; }
+function quotes() { return (S.data && S.data.quotes) || []; }
+function quoteById(id) { return quotes().find(q => q.id === id); }
+function quoteFor(reqId) { return quotes().filter(q => q.requestId === reqId).sort((a, b) => String(b.created).localeCompare(String(a.created)))[0]; }
+function reqById(id) { return (S.data.requests || []).find(x => x.id === id); }
+function offersWaiting() { return quotes().filter(q => q.status === 'Offer received' && !q.expired).length; }
+function halfUp(x) { return Math.max(0.5, Math.ceil(x * 2 - 1e-9) / 2); }
+function hrsTxt(h) { return h < 1 ? Math.round(h * 60) + ' min' : (h % 1 ? h.toFixed(1) : h.toFixed(0)) + ' h'; }
+function digits(v) { return Number(String(v || '').replace(/\D/g, '')) || 0; }
+function dots(n) { return String(Math.round(n || 0)).replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
+function calc(c) {
+  const p = PR(), m = p.mults[c.detail] || 1, pf = c.tricky ? 1 + p.tricky : 1;
+  const raw = c.len * c.pieces / p.cph * m * pf;
+  const low = halfUp(raw * (1 - p.range)), mid = halfUp(raw), high = halfUp(raw * (1 + p.range));
+  const pLow = Math.max(p.rate, low * p.rate), pMid = Math.max(p.rate, mid * p.rate), pHigh = Math.max(p.rate, high * p.rate);
+  return { raw: raw, low: low, mid: mid, high: high, pLow: pLow, pMid: pMid, pHigh: pHigh, sessions: Math.ceil(high / p.maxSession),
+    suggested: Math.round(pMid / 50000) * 50000, floor: Math.max(p.rate, Math.round(pLow / 50000) * 50000) };
+}
+function reqToCalc(r) {
+  const size = String(r.size || ''), style = String(r.style || '').toLowerCase();
+  const len = /^tiny/i.test(size) ? 4 : /^small/i.test(size) ? 7 : /^medium/i.test(size) ? 15 : /^large|sleeve/i.test(size) ? 22 : 7;
+  const detail = /fine/.test(style) ? 0 : /script|letter/.test(style) ? 1 : /illustr|ornament/.test(style) ? 2 : /black/.test(style) ? 3 : 0;
+  const idea = String(r.idea || '').split(/[.\n]/)[0].trim();
+  return { len: len, pieces: 1, detail: detail, tricky: /hand|finger|rib|neck|foot|feet|spine/i.test(r.placement || ''),
+    piece: (idea.length > 60 ? idea.slice(0, 57) + '…' : idea) || 'Your tattoo', placementText: r.placement || '' };
+}
+function isOwnerMe() { return /owner/i.test((meRec() || {}).role || ''); }
+
+A.makeQuote = d => {
+  const r = reqById(d.id); if (!r) return;
+  openCalc(Object.assign(reqToCalc(r), { reqId: r.id, client: r.name, phone: r.phone, handle: r.handle }));
+};
+A.editQuote = d => {
+  const q = quoteById(d.id); if (!q) return;
+  const p = PR();
+  openCalc({ quoteId: q.id, reqId: q.requestId, client: q.client, phone: q.phone, handle: q.handle, piece: q.piece,
+    placementText: String(q.placement || '').replace(/\s*\(tricky\)$/, ''), tricky: /\(tricky\)/.test(q.placement || ''),
+    len: q.len || 7, pieces: q.pieces || 1, detail: Math.max(0, p.names.indexOf(q.detail)), quote: q.quoted, offer: q.offer });
+};
+function openCalc(c) {
+  const p = PR();
+  S.calc = Object.assign({ pieces: 1, detail: 0, tricky: false, quote: null }, c);
+  const keepQuote = c.quote != null;
+  const h = '<p class="sub" style="margin:-4px 0 14px">' + esc(c.client || '') + (c.offer ? ' · offered ' + rp(c.offer) : '') + '</p>' +
+    '<div class="field"><label class="label" for="qPiece">piece · what the client sees</label><input id="qPiece" class="input" value="' + esc(c.piece || '') + '"></div>' +
+    '<div class="field"><div class="row" style="align-items:baseline"><label class="label" for="qLen">longest side</label><span class="mono" id="qLenLabel" style="font-size:20px"></span></div>' +
+    '<input id="qLen" type="range" min="2" max="30" step="1" value="' + S.calc.len + '" class="range">' +
+    '<div class="row label"><span>2 cm</span><span>' + p.cph + ' cm = 1 h minimal</span><span>30 cm</span></div></div>' +
+    '<div class="row" style="align-items:center;margin:0 0 14px"><span><span class="label" style="display:block">pieces</span><span class="sub">same size, same session</span></span>' +
+    '<div class="stepper" style="width:150px"><button type="button" data-a="qPieces" data-v="-1" aria-label="Fewer pieces">−</button><span id="qPieces"></span><button type="button" data-a="qPieces" data-v="1" aria-label="More pieces">+</button></div></div>' +
+    '<div class="label">detail</div><div class="detailgrid" role="group" aria-label="Detail">' + p.names.map((n, i) =>
+      '<button data-a="qDetail" data-i="' + i + '" aria-pressed="' + (S.calc.detail === i) + '"><span>' + esc(n) + '</span><span class="mono">×' + p.mults[i] + '</span></button>').join('') + '</div>' +
+    '<div class="label" style="margin-top:12px">placement</div><div id="qPlaceBox">' + placeSeg() + '</div>' +
+    '<section class="calm" id="calcOut" aria-live="polite"></section>' +
+    '<div class="field" style="margin-top:14px"><label class="label" for="qPrice">your quote (rp)</label><input id="qPrice" class="input mono qprice" inputmode="numeric">' +
+    '<span class="label" id="qNote" style="display:block;margin-top:6px"></span></div>' +
+    '<dl class="facts"><div><dt>deposit to hold the date</dt><dd class="mono">' + rp(p.deposit) + '</dd></div><div><dt>link valid for</dt><dd class="mono">' + (p.validDays || 7) + ' days</dd></div></dl>' +
+    '<button class="btn primary wide" id="qSave" data-a="saveQuote">' + (c.quoteId ? (c.offer ? 'Send counter-offer' : 'Update and resend') : 'Save and send quote') + '</button>' +
+    '<p class="whisper center">saved to the quotes tab. the client gets a link to accept or suggest a price.</p>';
+  sheet(c.quoteId ? (c.offer ? 'Counter ' : 'Edit ') + c.quoteId : 'New quote', h, el => {
+    el.querySelector('#qLen').oninput = e => { S.calc.len = Number(e.target.value); drawCalc(true); };
+    const qp = el.querySelector('#qPrice');
+    qp.oninput = e => { S.calc.quote = digits(e.target.value); drawQuoteNote(); };
+    qp.onblur = e => { e.target.value = dots(S.calc.quote); };
+    drawCalc(!keepQuote);
+    qp.value = dots(S.calc.quote);
+  });
+}
+function placeSeg() { const p = PR(); return seg('qPlace', S.calc.tricky ? 'tricky' : 'easy', [['easy', 'arm · leg · back'], ['tricky', 'tricky spot +' + Math.round(p.tricky * 100) + '%']], 'Placement'); }
+function drawCalc(resetQuote) {
+  const c = S.calc, r = calc(c), p = PR();
+  if (resetQuote || c.quote == null) { c.quote = r.suggested; const qi = document.getElementById('qPrice'); if (qi) qi.value = dots(c.quote); }
+  document.getElementById('qLenLabel').textContent = c.len + ' cm' + (c.pieces > 1 ? ' × ' + c.pieces : '');
+  document.getElementById('qPieces').textContent = c.pieces;
+  document.getElementById('calcOut').innerHTML =
+    '<div class="row"><span class="label calm-hi">estimate</span><span class="label calm-mut">about ' + hrsTxt(r.raw) + ' of work</span></div>' +
+    '<div class="bignum calm-hi" style="font-size:28px">' + (r.pLow === r.pHigh ? rp(r.pLow) : rp(r.pLow) + ' – ' + dots(r.pHigh)) + '</div>' +
+    '<span class="label calm-mut">' + (r.low === r.high ? hrsTxt(r.low) : hrsTxt(r.low) + ' – ' + hrsTxt(r.high)) + ' in the chair · ' + (r.sessions > 1 ? r.sessions + ' sessions' : '1 session') + '</span>' +
+    (r.raw < 1 && r.pHigh === p.rate ? '<p style="margin:0;font-size:14px">Under an hour of work, so the ' + rp(p.rate) + ' session minimum applies.</p>' : '') +
+    (r.high > p.maxSession ? '<p style="margin:0;font-size:14px">Large piece. Each session is priced and booked on its own.</p>' : '');
+  drawQuoteNote();
+}
+function drawQuoteNote() {
+  const c = S.calc, r = calc(c), p = PR(), el = document.getElementById('qNote'), inp = document.getElementById('qPrice');
+  let txt, warn = false;
+  if (c.quote < p.rate) { txt = 'below the ' + rp(p.rate) + ' session minimum'; warn = true; }
+  else if (c.quote < r.floor) { txt = isOwnerMe() ? 'below the low end of the estimate · you are the owner, so you can send it' : 'below the low end · only the owner can send this'; warn = true; }
+  else txt = 'suggested ' + rp(r.suggested) + ' · middle of the estimate';
+  el.textContent = txt; el.classList.toggle('hi', warn); inp.classList.toggle('warn', warn);
+}
+A.qDetail = d => {
+  S.calc.detail = Number(d.i); SFX.tap();
+  document.querySelectorAll('.detailgrid button').forEach(b => b.setAttribute('aria-pressed', b.dataset.i === d.i));
+  drawCalc(true);
+};
+A.qPlace = d => { S.calc.tricky = d.k === 'tricky'; SFX.tap(); document.getElementById('qPlaceBox').innerHTML = placeSeg(); drawCalc(true); };
+A.qPieces = d => { S.calc.pieces = Math.min(8, Math.max(1, S.calc.pieces + Number(d.v))); drawCalc(true); };
+A.saveQuote = async () => {
+  const c = S.calc, r = calc(c), p = PR();
+  c.piece = (document.getElementById('qPiece').value || '').trim();
+  if (!c.piece) return toast('Describe the piece for the client', true);
+  if (c.quote < p.rate) return toast('Below the session minimum', true);
+  const payload = { id: c.quoteId || '', requestId: c.reqId || '', client: c.client, phone: c.phone, handle: c.handle, piece: c.piece,
+    len: c.len, pieces: c.pieces, detail: p.names[c.detail], placement: (c.placementText || (c.tricky ? 'tricky spot' : '')) + (c.tricky ? ' (tricky)' : ''),
+    hours: r.mid, low: r.pLow, high: r.pHigh, quoted: c.quote, deposit: p.deposit };
+  const btn = document.getElementById('qSave'); btn.disabled = true; btn.innerHTML = '<span class="spin"></span>';
+  try {
+    const res = await run('api_saveQuote', S.code, payload, S.me);
+    setData(res.data); SFX.save(); render();
+    showSend(res.id, res.link, c);
+  } catch (e) { toast(e.message, true); btn.disabled = false; btn.textContent = 'Save and send quote'; }
+};
+function waQuoteText(first, piece, link, counter) {
+  return 'Hi ' + first + '! ' + (counter ? 'Thanks for your offer. Here is our updated' : 'Here is your') + ' KRIYĀ quote for the ' + String(piece).toLowerCase() + ':\n' + link + '\nYou can accept it or suggest a price there.';
+}
+function showSend(id, link, c) {
+  const wa = phoneLink(c.phone), ig = handleOf(c.handle), first = String(c.client || '').split(' ')[0];
+  const text = waQuoteText(first, c.piece, link, !!c.offer);
+  const h = '<div class="calm"><span class="label calm-hi">ready to send · ' + esc(id) + '</span><div class="bignum calm-hi">' + rp(c.quote) + '</div>' +
+    '<span class="label calm-mut">valid ' + (PR().validDays || 7) + ' days · deposit ' + rp(PR().deposit) + '</span></div>' +
+    (wa ? '<a class="btn primary wide" target="_blank" rel="noopener" href="https://wa.me/' + wa + '?text=' + encodeURIComponent(text) + '">' + ICON.wa + 'Send on WhatsApp</a>' : '') +
+    (ig ? '<a class="btn wide" target="_blank" rel="noopener" href="https://instagram.com/' + encodeURIComponent(ig) + '">' + ICON.ig + 'Open Instagram DM</a>' : '') +
+    '<label class="label" for="qLink" style="display:block;margin-top:14px">quote link</label><input id="qLink" class="input mono" readonly value="' + esc(link) + '" style="font-size:13px">' +
+    '<button class="btn wide" data-a="copyLink">Copy link</button>' +
+    (c.reqId ? '<button class="btn wide" data-a="openRequest" data-id="' + esc(c.reqId) + '">Back to the request</button>' : '');
+  sheet('Quote saved', h, el => { el.querySelector('#qLink').onfocus = e => e.target.select(); });
+}
+A.copyLink = async () => {
+  const i = document.getElementById('qLink'); if (!i) return;
+  i.focus(); i.select();
+  try { await navigator.clipboard.writeText(i.value); toast('Link copied'); }
+  catch (e) { try { document.execCommand('copy') ? toast('Link copied') : toast('Press and hold the link to copy it', true); } catch (er) { toast('Press and hold the link to copy it', true); } }
+};
+A.quoteDecision = async d => {
+  if (d.act === 'decline' && !confirm('Decline this offer? The client sees that the studio could not do that price.')) return;
+  try {
+    setData(await run('api_quoteDecision', S.code, d.id, d.act, S.me));
+    d.act === 'acceptOffer' ? SFX.allDone() : SFX.status();
+    render(); const q = quoteById(d.id); if (q && q.requestId) A.openRequest({ id: q.requestId }); else if (q) A.openQuote({ id: q.id });
+    toast(d.act === 'acceptOffer' ? 'Offer accepted' : 'Declined');
+  } catch (e) { toast(e.message, true); }
+};
+A.bookQuote = d => {
+  const q = quoteById(d.id); if (!q) return;
+  if (!q.requestId) {
+    const hit = (S.data.clients || []).find(c => c.name.toLowerCase() === String(q.client).toLowerCase());
+    openForm({ client: q.client, clientId: hit ? hit.id : '', phone: q.phone, handle: q.handle, date: today(), source: 'Walk-in',
+      placement: [String(q.placement || '').replace(/\s*\(tricky\)$/, ''), q.piece].filter(Boolean).join(' · '), value: q.agreed || q.quoted, hours: q.hours || 2, quoteId: q.id,
+      notes: 'Quote ' + q.id + ' · agreed ' + rp(q.agreed || q.quoted) + (q.prefDate ? ' · prefers ' + q.prefDate : '') });
+    if (!hit) { S.form.F.isNew = true; drawClient(); }
+    return;
+  }
+  bookFrom(q.requestId, { value: q.agreed || q.quoted, hours: q.hours || 2, quoteId: q.id,
+    extra: 'Quote ' + q.id + ' · agreed ' + rp(q.agreed || q.quoted) + (q.prefDate ? ' · prefers ' + q.prefDate : '') });
+};
+function quotePill(r) {
+  const q = quoteFor(r.id); if (!q) return '';
+  if (q.expired) return '<span class="pill off">quote expired</span>';
+  if (q.status === 'Offer received') return '<span class="pill warn">offer ' + esc(rp(q.offer)) + '</span>';
+  if (q.status === 'Accepted') return '<span class="pill ok">accepted ' + esc(rp(q.agreed)) + '</span>';
+  if (q.status === 'Declined') return '<span class="pill off">declined</span>';
+  if (q.status === 'Sent') return '<span class="pill">quoted ' + esc(rp(q.quoted)) + '</span>';
+  return '';
+}
+function quoteBlock(r) {
+  const q = quoteFor(r.id);
+  if (r.bookingId) return '<button class="btn primary wide" style="margin-top:10px" data-a="openBooking" data-id="' + esc(r.bookingId) + '">Open booking ' + esc(r.bookingId) + '</button>';
+  if (!q) return '<button class="btn primary wide" style="margin-top:10px" data-a="makeQuote" data-id="' + esc(r.id) + '">Make a quote</button>' +
+    '<button class="btn wide" data-a="bookRequest" data-id="' + esc(r.id) + '">Book without a quote</button>';
+  return quoteActions(q, r.id);
+}
+function quoteActions(q, reqId) {
+  if (q.status === 'Booked' && q.bookingId) return '<button class="btn primary wide" style="margin-top:10px" data-a="openBooking" data-id="' + esc(q.bookingId) + '">Open booking ' + esc(q.bookingId) + '</button>';
+  const wa = phoneLink(q.phone), first = String(q.client || '').split(' ')[0];
+  let h = '<h3>Quote <span class="pill idchip">' + esc(q.id) + '</span></h3>';
+  if (q.status === 'Offer received' && !q.expired) {
+    const low = q.offer < q.low, underMin = q.offer < PR().rate;
+    h += '<div class="calm"><span class="label calm-hi">client offered</span><div class="bignum calm-hi">' + rp(q.offer) + '</div>' +
+      '<span class="label calm-mut">your quote ' + rp(q.quoted) + ' · estimate ' + rp(q.low) + ' – ' + dots(q.high) + '</span>' +
+      (q.clientNote ? '<p style="margin:0">“' + esc(q.clientNote) + '”</p>' : '') +
+      (underMin ? '<span class="label calm-hi">below the ' + esc(rp(PR().rate)) + ' session minimum · counter or decline</span>'
+        : low ? '<span class="label calm-hi">below the low end · ' + (isOwnerMe() ? 'your call as owner' : 'only the owner can accept') + '</span>' : '') + '</div>' +
+      '<div class="actions">' + (underMin ? '' : '<button class="btn primary wide" data-a="quoteDecision" data-act="acceptOffer" data-id="' + esc(q.id) + '"' + (low && !isOwnerMe() ? ' disabled' : '') + '>Accept ' + esc(rp(q.offer)) + '</button>') +
+      '<button class="btn" data-a="editQuote" data-id="' + esc(q.id) + '">Counter</button><button class="btn" data-a="quoteDecision" data-act="decline" data-id="' + esc(q.id) + '">Decline</button></div>';
+  } else if (q.status === 'Accepted') {
+    h += '<div class="calm"><span class="label calm-hi">accepted</span><div class="bignum calm-hi">' + rp(q.agreed || q.quoted) + '</div>' +
+      '<span class="label calm-mut">' + (q.prefDate ? 'prefers ' + esc(q.prefDate) : 'no date preference yet') + '</span>' + (q.clientNote ? '<p style="margin:0">“' + esc(q.clientNote) + '”</p>' : '') + '</div>' +
+      '<button class="btn primary wide" data-a="bookQuote" data-id="' + esc(q.id) + '">Book this session</button>' +
+      (wa ? '<a class="btn wide" target="_blank" rel="noopener" href="https://wa.me/' + wa + '?text=' + encodeURIComponent('Hi ' + first + '! Thanks for accepting. ') + '">' + ICON.wa + 'Confirm the date on WhatsApp</a>' : '');
+  } else if (q.status === 'Declined') {
+    h += '<p class="muted">Declined. The client sees that we could not do their price.</p><button class="btn primary wide" data-a="' + (reqId ? 'makeQuote' : 'walkReset') + '" data-id="' + esc(reqId) + '">Make a new quote</button>';
+  } else {
+    h += '<div class="calm"><span class="label calm-hi">' + (q.expired ? 'expired ' : 'sent · valid until ') + esc(nice(q.validUntil, { day: 'numeric', month: 'short' })) + '</span><div class="bignum calm-hi">' + rp(q.quoted) + '</div>' +
+      '<span class="label calm-mut">' + esc(q.detail) + ' · ' + esc(String(q.len)) + ' cm' + (q.pieces > 1 ? ' × ' + q.pieces : '') + ' · waiting for the client</span></div>' +
+      '<div class="actions">' + (wa && q.link ? '<a class="btn" target="_blank" rel="noopener" href="https://wa.me/' + wa + '?text=' + encodeURIComponent(waQuoteText(first, q.piece, q.link)) + '">' + ICON.wa + 'Resend</a>' : '') +
+      '<button class="btn" data-a="editQuote" data-id="' + esc(q.id) + '">' + (q.expired ? 'Renew' : 'Edit') + '</button></div>';
+  }
+  if (q.log) h += '<details class="qlog"><summary class="label">history</summary>' + String(q.log).split('\n').slice(0, 8).map(l => '<div class="mono">' + esc(l) + '</div>').join('') + '</details>';
+  return h;
+}
+
+/* ---------- quote tab: walk-ins and DMs (price first, then the client) ---------- */
+function walk() { if (!S.walk) S.walk = { step: 1, calc: { len: 7, pieces: 1, detail: 0, tricky: false, quote: null } }; return S.walk; }
+function walkQuotes() { return quotes().filter(q => !q.requestId && !/^(Booked|Declined)$/.test(q.status)).sort((a, b) => String(b.updated || b.created).localeCompare(String(a.updated || a.created))); }
+function walkAttention() { return walkQuotes().filter(q => !q.expired && (q.status === 'Offer received' || q.status === 'Accepted')).length; }
+function viewQuote() {
+  const w = walk(); S.calc = w.calc;
+  const p = PR();
+  const steps = '<div class="steps" aria-label="Step ' + w.step + ' of 2"><span' + (w.step === 1 ? ' class="on"' : '') + '>01 price</span><span' + (w.step === 2 ? ' class="on"' : '') + '>02 client</span></div>';
+  if (w.step === 2) {
+    const r = calc(w.calc), c = w.calc, chosen = w.clientId ? clientById(w.clientId) : null;
+    let h = '<h1 class="pagetitle">Client.</h1>' + steps +
+      '<button class="card rowcard" data-a="walkBack" style="margin-top:0"><span><span class="title mono">' + rp(c.quote) + '</span>' +
+      '<span class="sub mono">' + esc(p.names[c.detail].toLowerCase()) + ' · ' + c.len + ' cm' + (c.pieces > 1 ? ' × ' + c.pieces : '') + ' · about ' + hrsTxt(r.mid) + '</span></span><span class="hi mono">edit price</span></button>';
+    if (chosen) {
+      h += '<div class="field"><span class="label" style="display:block;margin-bottom:6px">client</span><div class="chosen"><div><div class="title">' + esc(chosen.name) + '</div><div class="sub">' +
+        esc([chosen.handle, chosen.sessions ? chosen.sessions + ' sessions' : ''].filter(Boolean).join(' · ') || 'in the CRM') + '</div></div>' +
+        '<button type="button" class="iconbtn" data-a="walkUnpick" aria-label="Change client">' + ICON.close + '</button></div></div>';
+      if (chosen.sens) h += '<div class="callout"><div class="label">Sensitivities & placement</div><div style="margin-top:6px">' + esc(chosen.sens) + '</div></div>';
+    } else {
+      h += '<div class="field"><label class="label" for="wName">client name</label><input id="wName" data-w="name" class="input" autocomplete="off" placeholder="search the CRM or type a new name" value="' + esc(w.name || '') + '"><div id="wSugg"></div></div>';
+    }
+    h += '<div class="grid2"><div class="field"><label class="label" for="wPhone">whatsapp</label><input id="wPhone" data-w="phone" class="input" inputmode="tel" placeholder="0812…" value="' + esc(w.phone || '') + '"></div>' +
+      '<div class="field"><label class="label" for="wHandle">instagram</label><input id="wHandle" data-w="handle" class="input" placeholder="@handle" value="' + esc(w.handle || '') + '"></div></div>' +
+      '<div class="field"><label class="label" for="wPiece">the piece</label><input id="wPiece" data-w="piece" class="input" placeholder="e.g. small moth, fineline" value="' + esc(w.piece || '') + '"></div>' +
+      '<div class="field"><label class="label" for="wPlace">placement</label><input id="wPlace" data-w="place" class="input" placeholder="e.g. inner forearm" value="' + esc(w.place || '') + '"></div>' +
+      (chosen ? '' : '<div class="field"><label class="label" for="wSens">allergies or sensitivities</label><input id="wSens" data-w="sens" class="input" placeholder="optional" value="' + esc(w.sens || '') + '"></div>') +
+      '<button class="btn primary wide" id="wBook" data-a="walkBook">Agreed · book now</button>' +
+      '<button class="btn wide" id="wSend" data-a="walkSend">Send quote link instead</button>' +
+      '<p class="whisper center">book now when the client says yes in person. send the link when they want to think about it.</p>';
+    return h;
+  }
+  let h = '<h1 class="pagetitle">Quote.</h1>' + steps +
+    '<p class="sub" style="margin:-6px 0 16px">price a walk-in or a DM first, then add the client.</p>' + calcControls() +
+    '<button class="btn primary wide" data-a="walkNext">Next: client details</button>' +
+    (w.calc.quote != null && (w.name || w.piece) ? '<button class="linkbtn" data-a="walkReset" style="display:block;margin:6px auto 0">start a new quote</button>' : '');
+  const open = walkQuotes();
+  if (open.length) {
+    h += '<h3>Open quotes</h3>' + open.map(q => {
+      const pill = q.expired ? '<span class="pill off">expired</span>' : q.status === 'Offer received' ? '<span class="pill warn">offer ' + esc(rp(q.offer)) + '</span>'
+        : q.status === 'Accepted' ? '<span class="pill ok">accepted · book it</span>' : '<span class="pill">waiting</span>';
+      return '<button class="card" data-a="openQuote" data-id="' + esc(q.id) + '"><div class="row"><div style="flex:1;min-width:0"><div class="title">' + esc(q.client) + '</div>' +
+        '<div class="sub">' + esc(q.piece) + '</div><div class="pills">' + pill + '<span class="pill idchip">' + esc(q.id) + '</span></div></div>' +
+        '<span class="mono" style="font-size:14px">' + rp(q.agreed || q.quoted) + '</span></div></button>';
+    }).join('');
+  }
+  return h;
+}
+function calcControls() {
+  const p = PR(), c = S.calc;
+  return '<div class="field"><div class="row" style="align-items:baseline"><label class="label" for="qLen">longest side</label><span class="mono" id="qLenLabel" style="font-size:20px"></span></div>' +
+    '<input id="qLen" type="range" min="2" max="30" step="1" value="' + c.len + '" class="range">' +
+    '<div class="row label"><span>2 cm</span><span>' + p.cph + ' cm = 1 h minimal</span><span>30 cm</span></div></div>' +
+    '<div class="row" style="align-items:center;margin:0 0 14px"><span><span class="label" style="display:block">pieces</span><span class="sub">same size, same session</span></span>' +
+    '<div class="stepper" style="width:150px"><button type="button" data-a="qPieces" data-v="-1" aria-label="Fewer pieces">−</button><span id="qPieces"></span><button type="button" data-a="qPieces" data-v="1" aria-label="More pieces">+</button></div></div>' +
+    '<div class="label">detail</div><div class="detailgrid" role="group" aria-label="Detail">' + p.names.map((n, i) =>
+      '<button data-a="qDetail" data-i="' + i + '" aria-pressed="' + (c.detail === i) + '"><span>' + esc(n) + '</span><span class="mono">×' + p.mults[i] + '</span></button>').join('') + '</div>' +
+    '<div class="label" style="margin-top:12px">placement</div><div id="qPlaceBox">' + placeSeg() + '</div>' +
+    '<section class="calm" id="calcOut" aria-live="polite"></section>' +
+    '<div class="field" style="margin-top:14px"><label class="label" for="qPrice">your quote (rp)</label><input id="qPrice" class="input mono qprice" inputmode="numeric">' +
+    '<span class="label" id="qNote" style="display:block;margin-top:6px"></span></div>';
+}
+function wireCalc() {
+  const len = document.getElementById('qLen'), qp = document.getElementById('qPrice');
+  if (!len || !qp) return;
+  len.oninput = e => { S.calc.len = Number(e.target.value); drawCalc(true); };
+  qp.oninput = e => { S.calc.quote = digits(e.target.value); drawQuoteNote(); };
+  qp.onblur = e => { e.target.value = dots(S.calc.quote); };
+  drawCalc(S.calc.quote == null);
+  qp.value = dots(S.calc.quote);
+}
+function afterRender() {
+  if (S.tab === 'quote' && walk().step === 1 && !document.getElementById('layer').innerHTML) wireCalc();
+  if (S.tab === 'quote' && walk().step === 2) drawWalkSugg();
+}
+A.walkNext = () => {
+  const c = walk().calc, p = PR();
+  if (c.quote < p.rate) return toast('Below the ' + rp(p.rate) + ' session minimum', true);
+  if (c.quote < calc(c).floor && !isOwnerMe()) return toast('Below the low end. Only the owner can quote this.', true);
+  SFX.tap(); walk().step = 2; render(); window.scrollTo(0, 0);
+  setTimeout(() => { const i = document.getElementById('wName'); if (i && !i.value) i.focus(); }, 60);
+};
+A.walkBack = () => { walk().step = 1; SFX.tap(); render(); window.scrollTo(0, 0); };
+A.walkReset = () => { S.walk = null; A.closeSheet(); S.tab = 'quote'; render(); window.scrollTo(0, 0); };
+function drawWalkSugg() {
+  const box = document.getElementById('wSugg'), w = walk();
+  if (!box) return;
+  const q = String(w.name || '').trim().toLowerCase();
+  const hits = q.length > 1 ? (S.data.clients || []).filter(c => (c.name + ' ' + c.handle + ' ' + c.phone).toLowerCase().includes(q)).slice(0, 4) : [];
+  box.innerHTML = hits.length ? '<div class="suggest">' + hits.map(c => '<button type="button" data-a="walkPick" data-id="' + esc(c.id) + '"><b>' + esc(c.name) + '</b> <span class="muted">' + esc(c.handle || '') + '</span></button>').join('') +
+    '<button type="button" data-a="walkNew">+ New client “' + esc(w.name.trim()) + '”</button></div>' : '';
+}
+A.walkPick = d => { const c = clientById(d.id), w = walk(); if (!c) return; Object.assign(w, { clientId: c.id, name: c.name, phone: w.phone || c.phone, handle: w.handle || c.handle }); SFX.tap(); render(); };
+A.walkNew = () => { document.getElementById('wSugg').innerHTML = ''; const i = document.getElementById('wPhone'); if (i) i.focus(); };
+A.walkUnpick = () => { const w = walk(); w.clientId = ''; w.name = ''; render(); setTimeout(() => { const i = document.getElementById('wName'); if (i) i.focus(); }, 40); };
+function walkPayload(inPerson) {
+  const w = walk(), c = w.calc, r = calc(c), p = PR();
+  const chosen = w.clientId ? clientById(w.clientId) : null;
+  return {
+    id: '', requestId: '', client: (chosen ? chosen.name : String(w.name || '').trim()), phone: String(w.phone || '').trim(), handle: String(w.handle || '').trim(),
+    piece: String(w.piece || '').trim(), len: c.len, pieces: c.pieces, detail: p.names[c.detail],
+    placement: (String(w.place || '').trim() || (c.tricky ? 'tricky spot' : '')) + (c.tricky ? ' (tricky)' : ''),
+    hours: r.mid, low: r.pLow, high: r.pHigh, quoted: c.quote, deposit: p.deposit, inPerson: !!inPerson
+  };
+}
+function walkCheck(q, needContact) {
+  if (!q.client) { toast('Add the client’s name', true); return false; }
+  if (!q.piece) { toast('Describe the piece', true); return false; }
+  if (needContact && !q.phone && !q.handle) { toast('Add WhatsApp or Instagram so you can send the link', true); return false; }
+  return true;
+}
+A.walkBook = async () => {
+  const w = walk(), q = walkPayload(true);
+  if (!walkCheck(q, false)) return;
+  if (w.quoteId && quoteById(w.quoteId)) return A.bookQuote({ id: w.quoteId });
+  const btn = document.getElementById('wBook'); btn.disabled = true; btn.innerHTML = '<span class="spin"></span>';
+  try {
+    const res = await run('api_saveQuote', S.code, q, S.me);
+    setData(res.data); SFX.status(); w.quoteId = res.id; render();
+    const chosen = w.clientId ? clientById(w.clientId) : (S.data.clients || []).find(c => c.name.toLowerCase() === q.client.toLowerCase());
+    openForm({ client: q.client, clientId: chosen ? chosen.id : '', phone: q.phone, handle: q.handle, date: today(),
+      placement: [q.placement.replace(/\s*\(tricky\)$/, ''), q.piece].filter(Boolean).join(' · '), value: q.quoted, hours: q.hours,
+      notes: 'Walk-in · quote ' + res.id + ' agreed in person at ' + rp(q.quoted) + (w.sens ? '\nSensitivities: ' + w.sens : ''),
+      quoteId: res.id, sens: w.sens || '', source: 'Walk-in' });
+    if (!chosen) { S.form.F.isNew = true; drawClient(); }
+  } catch (e) { toast(e.message, true); btn.disabled = false; btn.textContent = 'Agreed · book now'; }
+};
+A.walkSend = async () => {
+  const q = walkPayload(false);
+  if (!walkCheck(q, true)) return;
+  const btn = document.getElementById('wSend'); btn.disabled = true; btn.innerHTML = '<span class="spin"></span>';
+  try {
+    const res = await run('api_saveQuote', S.code, q, S.me);
+    setData(res.data); SFX.save(); S.walk = null; render();
+    showSend(res.id, res.link, { client: q.client, phone: q.phone, handle: q.handle, piece: q.piece, quote: q.quoted });
+  } catch (e) { toast(e.message, true); btn.disabled = false; btn.textContent = 'Send quote link instead'; }
+};
+A.openQuote = d => { const q = quoteById(d.id); if (!q) return; sheet(q.client || q.id, '<p class="sub" style="margin:-4px 0 6px">' + esc(q.piece) + '</p>' + quoteActions(q, '')); };
+document.addEventListener('input', e => {
+  const k = e.target && e.target.dataset && e.target.dataset.w;
+  if (!k || !S.walk) return;
+  S.walk[k] = e.target.value;
+  if (k === 'name') drawWalkSugg();
+});
+
+/* ---------- clients ---------- */
+function viewClients() {
+  const all = (S.data.clients || []).slice();
+  let list = all;
+  const q = S.clientQ.toLowerCase();
+  if (q) list = list.filter(c => (c.name + ' ' + c.handle + ' ' + c.phone).toLowerCase().includes(q));
+  if (S.outreach) list = list.filter(c => (daysSince(c.last) ?? 0) >= 30).sort((a, b) => (daysSince(b.last) || 0) - (daysSince(a.last) || 0));
+  else list.sort((a, b) => String(b.last).localeCompare(String(a.last)));
+  const queue = all.filter(c => (daysSince(c.last) ?? 0) >= 30).length;
+  let h = '<h2>Clients</h2><div class="field"><label class="sr" for="cq">Search clients</label><input id="cq" class="input" placeholder="Search name, @handle or phone" value="' + esc(S.clientQ) + '"></div>' +
+    '<div class="seg"><button data-a="outreach" data-v="0" aria-pressed="' + !S.outreach + '">All <span class="mono">' + all.length + '</span></button><button data-a="outreach" data-v="1" aria-pressed="' + S.outreach + '">Due a check-in <span class="mono">' + queue + '</span></button></div>';
+  h += list.length ? list.map(c => { const ds = daysSince(c.last); return '<button class="card" data-a="openClient" data-id="' + esc(c.id) + '"><div class="row"><div><div class="title">' + esc(c.name) + '</div><div class="sub">' + esc(c.handle || c.phone || c.id) + '</div></div>' +
+    '<div style="text-align:right"><div class="mono" style="font-size:14px">' + rp(c.ltv) + '</div><div class="pills" style="justify-content:flex-end"><span class="pill">' + (c.sessions || 0) + ' sess.</span>' + (ds != null ? '<span class="pill ' + (ds >= 30 ? 'warn' : '') + '">' + ds + 'd</span>' : '') + '</div></div></div></button>'; }).join('')
+    : '<div class="empty">no clients match.</div>';
+  setTimeout(() => { const i = document.getElementById('cq'); if (i) i.oninput = e => { S.clientQ = e.target.value; const p = e.target.selectionStart; render(); const n = document.getElementById('cq'); n.focus(); n.setSelectionRange(p, p); }; }, 0);
+  return h;
+}
+A.outreach = d => { S.outreach = d.v === '1'; render(); };
+A.openClient = d => {
+  const c = clientById(d.id); if (!c) return;
+  const hist = bookings().filter(b => b.clientId === c.id || b.client.toLowerCase() === c.name.toLowerCase()).sort(byStart).reverse();
+  const ds = daysSince(c.last);
+  let h = '<div class="stats"><div class="stat"><div class="label">Lifetime</div><div class="n">' + rp(c.ltv) + '</div></div><div class="stat"><div class="label">Sessions</div><div class="n">' + (c.sessions || 0) + '</div></div></div>' +
+    '<dl class="kv"><dt>Last visit</dt><dd>' + (c.last ? nice(c.last, { day: 'numeric', month: 'short', year: 'numeric' }) + ' · ' + ds + ' days ago' : '—') + '</dd><dt>Sales rep</dt><dd>' + esc(c.rep || '—') + '</dd>' +
+    (c.stage ? '<dt>Cadence</dt><dd>' + esc(c.stage) + (c.window ? ' <span class="muted">· ' + esc(c.window) + '</span>' : '') + '</dd>' : '') +
+    (c.channel ? '<dt>Channel</dt><dd>' + esc(c.channel) + '</dd>' : '') + '</dl>';
+  h += '<div class="actions">' + contactButtons(c.phone, c.handle, '', c.script || '') + '<button class="btn" data-a="newBooking" data-client="' + esc(c.id) + '">New booking</button></div>';
+  if (c.script) h += '<div class="note"><span class="label">outreach message · whatsapp opens with this</span>' + esc(c.script) + '</div>';
+  h += '<div class="field"><label class="label" for="cSens">Sensitivities & placement</label><textarea id="cSens" class="input">' + esc(c.sens) + '</textarea></div>' +
+    '<div class="grid2"><div class="field"><label class="label" for="cPhone">WhatsApp</label><input id="cPhone" class="input" inputmode="tel" value="' + esc(c.phone) + '"></div><div class="field"><label class="label" for="cHandle">Instagram</label><input id="cHandle" class="input" value="' + esc(c.handle) + '"></div></div>' +
+    '<button class="btn wide" data-a="saveClient" data-id="' + esc(c.id) + '">Save client</button>';
+  h += '<h3>Bookings</h3>' + (hist.length ? hist.map(bookingCard).join('') : '<p class="muted">None in the app yet. Older sessions are counted in the totals above.</p>');
+  sheet(c.name, h);
+};
+A.saveClient = async d => {
+  try { setData(await run('api_saveClient', S.code, d.id, { sens: document.getElementById('cSens').value, phone: document.getElementById('cPhone').value, handle: document.getElementById('cHandle').value })); render(); toast('Client saved'); }
+  catch (e) { toast(e.message, true); }
+};
+
+/* ---------- money ---------- */
+function viewMoney() {
+  const m = S.month, st = S.data.settings;
+  const inMonth = bookings().filter(b => String(b.date).slice(0, 7) === m);
+  const live = inMonth.filter(b => statusKind(b.status) !== 'cancelled');
+  const sum = (arr, k) => arr.reduce((s, b) => s + (+b[k] || 0), 0);
+  const booked = sum(live, 'value'), done = sum(live.filter(b => statusKind(b.status) === 'done'), 'value');
+  const pct = st.target ? Math.min(100, Math.round(booked / st.target * 100)) : 0;
+  const reps = {}; live.forEach(b => { const k = b.rep || 'No rep'; reps[k] = reps[k] || { v: 0, c: 0, n: 0 }; reps[k].v += +b.value || 0; reps[k].c += +b.commission || 0; reps[k].n++; });
+  const owed = live.filter(b => statusKind(b.status) === 'done' && payKind(b.payment) !== 'paid').sort(byStart);
+  const cancelledVal = sum(inMonth.filter(b => statusKind(b.status) === 'cancelled'), 'value');
+  const label = pd(m + '-01').toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+  const myRep = (meRec() || {}).rep || '';
+  let h = '<div class="row" style="align-items:center"><button class="iconbtn" data-a="month" data-v="-1" aria-label="Previous month">‹</button><h2 style="margin:0">' + label + '</h2><button class="iconbtn" data-a="month" data-v="1" aria-label="Next month">›</button></div><div style="height:14px"></div>';
+  if (myRep) {
+    const mine = live.filter(b => b.rep === myRep), mineDone = mine.filter(b => statusKind(b.status) === 'done');
+    h += '<section class="calm mycomm"><span class="label calm-hi">your commission · ' + esc(first(S.me).toLowerCase()) + ' · ' + mine.length + ' session' + (mine.length === 1 ? '' : 's') + ' you booked</span>' +
+      '<div class="bignum"><span class="calm-hi">' + rp(sum(mine, 'commission')) + '</span></div>' +
+      '<span class="label calm-mut">' + rp(sum(mineDone, 'commission')) + ' from completed sessions · ' + rp(sum(mine, 'value')) + ' booked</span></section>';
+  } else h += '<p class="whisper">add your sales rep name in the app team tab to see your own commission here.</p>';
+  h += '<div class="stats"><div class="stat hot"><div class="label" style="color:var(--ink)">booked</div><div class="n">' + rp(booked) + '</div>' + (st.target ? '<div class="bar" role="img" aria-label="' + pct + '% of target"><i style="width:' + pct + '%"></i></div><div class="muted mono" style="font-size:12px;margin-top:6px">' + pct + '% of ' + rp(st.target) + '</div>' : '') + '</div>' +
+    '<div class="stat"><div class="label">Completed</div><div class="n">' + rp(done) + '</div><div class="muted mono" style="font-size:12px;margin-top:6px">' + live.length + ' sessions</div></div></div>';
+  h += '<h3>Commission by rep</h3>' + (Object.keys(reps).length ? '<table><thead><tr><th>Rep</th><th class="r">Revenue</th><th class="r">Comm.</th></tr></thead><tbody>' +
+    Object.keys(reps).sort().map(k => '<tr' + (k === myRep ? ' class="me-row"' : '') + '><td>' + esc(k) + ' <span class="muted mono" style="font-size:12px">· ' + reps[k].n + '</span></td><td class="r">' + rp(reps[k].v) + '</td><td class="r">' + rp(reps[k].c) + '</td></tr>').join('') + '</tbody></table>' : '<p class="muted">No bookings this month.</p>');
+  if (owed.length) h += '<h3>Not fully paid <span class="pill warn">' + owed.length + '</span></h3>' + owed.map(bookingCard).join('');
+  if (cancelledVal) h += '<p class="muted" style="font-size:13px;margin-top:18px">Cancelled bookings (' + rp(cancelledVal) + ') are left out here. The sheet dashboard still counts them.</p>';
+  return h;
+}
+A.month = d => { const [y, mo] = S.month.split('-').map(Number); const n = new Date(y, mo - 1 + Number(d.v), 1); S.month = ymd(n).slice(0, 7); render(); };
+
+/* ---------- wiring ---------- */
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-a]'); if (!t) return;
+  const fn = A[t.dataset.a]; if (!fn) return;
+  if (t.tagName === 'BUTTON' || t.classList.contains('scrim')) { if (t.dataset.a !== 'closeSheetBg') e.preventDefault(); }
+  fn(t.dataset, t, e);
+});
+document.addEventListener('pointerdown', () => SFX.unlock(), { once: true });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && document.getElementById('layer').innerHTML) A.closeSheet(); });
+function busy() { const a = document.activeElement; return a && /INPUT|TEXTAREA|SELECT/.test(a.tagName); }
+setInterval(() => { if (document.visibilityState === 'visible' && S.code && S.data && !busy() && !S.pending) refresh(true); }, 90000);
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && S.code && S.data && Date.now() - S.lastRefresh > 30000 && !busy()) refresh(true); });
+(function start() {
+  if (S.code) {
+    try { const cached = JSON.parse(ls('kriya_data') || 'null'); if (cached) { S.data = cached; S.day = cached.today; S.month = cached.today.slice(0, 7); } } catch (e) { }
+    if (S.data) render();
+    else document.getElementById('app').innerHTML = '<div class="lockbg"><div class="lock">' + word(true) + '<h1>Opening…</h1></div></div>';
+    refresh(true);
+  } else renderLock();
+})();
+</script>
+<script>KRIYA.start('app');</script>
+</body>
+</html>
