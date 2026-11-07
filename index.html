@@ -162,6 +162,8 @@ tr.me-row td{color:var(--hi);font-weight:600}
 .tasktitle{font-size:34px;margin:0 0 16px}
 .statusgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:6px 0 4px}
 .statusgrid button{height:46px;border-radius:12px;border:1px solid var(--line2);background:transparent;font:400 14px 'DM Mono',monospace;color:var(--text)}
+.statusgrid button .spin{width:12px;height:12px;margin-right:8px;vertical-align:-1px}
+.saving-note{margin:6px 0 0}
 .statusgrid button[aria-pressed=true]{background:var(--on-bg);color:var(--on-fg);border-color:var(--on-bg)}
 .facts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0}
 .facts div{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
@@ -250,7 +252,7 @@ const BOOT = window.__BOOT;
 const S = {
   code: ls('kriya_code'), me: ls('kriya_me'), data: null, tab: ls('kriya_tab') || 'today',
   todayView: 'mine', bookView: 'schedule', day: null, reqFilter: 'New', taskScope: 'mine', taskFilter: 'all',
-  clientQ: '', outreach: false, month: null, form: null, blocking: null, pending: 0, lastRefresh: 0, newReqSeen: null
+  clientQ: '', outreach: false, month: null, form: null, blocking: null, pending: 0, mutSeq: 0, saving: {}, lastRefresh: 0, newReqSeen: null
 };
 const A = {}; // click actions
 
@@ -271,13 +273,22 @@ function payKind(s) { s = String(s || ''); if (/refund/i.test(s)) return 'refund
 function phoneLink(p) { let d = String(p || '').replace(/\D/g, ''); if (!d) return ''; if (d[0] === '0') d = '62' + d.slice(1); return d; }
 function handleOf(h) { return String(h || '').trim().replace(/^@+/, '').replace(/^https?:\/\/(www\.)?instagram\.com\//, '').replace(/\/.*$/, ''); }
 function first(n) { return String(n || '').trim().split(/\s+/)[0]; }
+const RUN_TIMEOUT = 30000, READS = /^api_(bootstrap|login|images)$/;
 function run(fn, ...args) {
-  return new Promise((ok, bad) => google.script.run.withSuccessHandler(ok).withFailureHandler(e => {
-    const msg = (e && e.message) || String(e);
-    if (/AUTH:/.test(msg) && S.code) { ls('kriya_code', null); ls('kriya_data', null); S.code = ''; S.data = null; }
-    bad(new Error(msg.replace(/^.*?AUTH:\s*/, '').replace(/^Exception:\s*/, '')));
-  })[fn](...args));
+  if (!READS.test(fn)) S.mutSeq++;   // a save: any refresh already in flight is now out of date
+  return new Promise((ok, bad) => {
+    let settled = false;
+    const timer = setTimeout(() => { if (settled) return; settled = true; const e = new Error('The studio sheet is taking too long to answer. Check your connection.'); e.timeout = true; bad(e); }, RUN_TIMEOUT);
+    google.script.run.withSuccessHandler(r => { if (settled) return; settled = true; clearTimeout(timer); ok(r); }).withFailureHandler(e => {
+      if (settled) return; settled = true; clearTimeout(timer);
+      const msg = (e && e.message) || String(e);
+      if (/AUTH:/.test(msg) && S.code) { ls('kriya_code', null); ls('kriya_data', null); S.code = ''; S.data = null; }
+      bad(new Error(msg.replace(/^.*?AUTH:\s*/, '').replace(/^Exception:\s*/, '')));
+    })[fn](...args);
+  });
 }
+/** True when the task sheet for this id is the one on screen. */
+function sheetIs(id) { const el = document.querySelector('#layer .sheet'); return !!el && el.getAttribute('aria-label') === String(id); }
 function toast(msg, err) {
   if (err) SFX.error();
   document.querySelectorAll('.toast').forEach(t => t.remove());
@@ -380,7 +391,13 @@ function clientById(id) { return (S.data.clients || []).find(c => c.id === id); 
 function clientFor(b) { return clientById(b.clientId) || (S.data.clients || []).find(c => c.name.toLowerCase() === String(b.client).toLowerCase()); }
 function byStart(a, b) { return (a.date + (a.start || '99')).localeCompare(b.date + (b.start || '99')); }
 async function refresh(quiet) {
-  try { setData(await run('api_bootstrap', S.code)); render(); if (!quiet) toast('Up to date'); }
+  if (S.pending) { if (!quiet) toast('Saving first…'); return; }
+  const seq = S.mutSeq;
+  try {
+    const d = await run('api_bootstrap', S.code);
+    if (seq !== S.mutSeq || S.pending) return;   // a save happened meanwhile; its own answer is newer
+    setData(d); render(); if (!quiet) toast('Up to date');
+  }
   catch (e) { if (!S.code) render(); else if (!quiet) toast(e.message, true); }
 }
 A.refresh = () => { SFX.tap(); refresh(); };
@@ -593,8 +610,11 @@ A.openTask = d => {
   let h = '<div class="pills" style="margin:0 0 10px"><span class="pill idchip">' + esc(t.id) + '</span>' + (t.prio ? '<span class="pill prio-' + prioKind(t.prio) + '">' + esc(t.prio.toLowerCase()) + '</span>' : '') +
     '<span class="pill due-' + (du.kind || 'none') + '">' + esc(du.label) + '</span></div>' +
     '<h2 class="tasktitle">' + esc(t.title) + '</h2>';
-  h += '<div class="label">status</div><div class="statusgrid">' + L.status.map(s =>
-    '<button data-a="taskStatus" data-id="' + esc(t.id) + '" data-v="' + esc(s) + '" aria-pressed="' + (S.blocking === t.id ? taskKind(s) === 'blocked' : s === t.status) + '">' + esc(s.toLowerCase()) + '</button>').join('') + '</div>';
+  const sv = S.saving[t.id];
+  h += '<div class="label">status</div><div class="statusgrid"' + (sv ? ' aria-busy="true"' : '') + '>' + L.status.map(s =>
+    '<button data-a="taskStatus" data-id="' + esc(t.id) + '" data-v="' + esc(s) + '" aria-pressed="' + (S.blocking === t.id ? taskKind(s) === 'blocked' : s === t.status) + '"' + (sv ? ' disabled' : '') + '>' +
+    (sv && s === sv ? '<span class="spin"></span>' : '') + esc(s.toLowerCase()) + '</button>').join('') + '</div>' +
+    (sv ? '<p class="label saving-note" role="status">saving to the sheet…</p>' : '');
   if (S.blocking === t.id) {
     const bs = L.status.find(s => taskKind(s) === 'blocked') || 'Blocked';
     h += '<div class="calm" style="margin-top:10px"><label class="label calm-hi" for="tBlock">what is it waiting for?</label>' +
@@ -624,20 +644,41 @@ A.confirmBlock = async d => {
   await setTaskStatus(d.id, d.v, reason.trim());
 };
 async function setTaskStatus(id, status, reason) {
-  document.querySelectorAll('.statusgrid button').forEach(b => b.disabled = true);
+  const t = taskById(id);
+  if (!t || S.saving[id]) return;
+  // 1. show the change straight away
+  const prev = { status: t.status, completed: t.completed, blocker: t.blocker };
+  const k = taskKind(status), wk = taskKind(prev.status);
+  t.status = status;
+  if (k === 'done') t.completed = (S.data && S.data.today) || today(); else if (wk === 'done') t.completed = '';
+  if (k === 'blocked') t.blocker = reason || t.blocker; else if (wk === 'blocked') t.blocker = '';
+  S.blocking = null; S.saving[id] = status; S.pending++;
+  k === 'done' ? SFX.allDone() : SFX.status();
+  const redraw = () => { render(); if (sheetIs(id)) A.openTask({ id: id }); };
+  redraw();
+  // 2. save it
+  const req = run('api_setTaskStatus', S.code, id, status, reason, S.me), seq = S.mutSeq;
   try {
-    setData(await run('api_setTaskStatus', S.code, id, status, reason, S.me));
-    S.blocking = null;
-    taskKind(status) === 'done' ? SFX.allDone() : SFX.status();
-    render(); A.openTask({ id: id }); toast(status);
-  } catch (e) { toast(e.message, true); document.querySelectorAll('.statusgrid button').forEach(b => b.disabled = false); }
+    const d = await req;
+    if (seq === S.mutSeq) setData(d);
+    else { const fresh = (d.tasks || []).find(x => x.id === id), cur = taskById(id); if (fresh && cur) Object.assign(cur, fresh); }
+    delete S.saving[id]; S.pending--; saveCache(); redraw();
+    toast('Saved · ' + status.toLowerCase());
+  } catch (e) {
+    // 3. put it back, say why, and check the sheet for what really happened
+    delete S.saving[id]; S.pending--;
+    const cur = taskById(id); if (cur) Object.assign(cur, prev);
+    redraw(); toast(e.message, true);
+    if (e.timeout && S.code) refresh(true).then(redraw);
+  }
 }
 A.taskNote = async d => {
   const inp = document.getElementById('tNote'), text = inp.value.trim();
   if (!text) return toast('Write an update first', true);
   inp.disabled = true;
-  try { setData(await run('api_addTaskNote', S.code, d.id, text, S.me)); SFX.tick(); render(); A.openTask({ id: d.id }); toast('Update posted'); }
-  catch (e) { inp.disabled = false; toast(e.message, true); }
+  S.pending++;
+  try { setData(await run('api_addTaskNote', S.code, d.id, text, S.me)); S.pending--; SFX.tick(); render(); if (sheetIs(d.id)) A.openTask({ id: d.id }); toast('Update posted'); }
+  catch (e) { S.pending--; inp.disabled = false; toast(e.message, true); }
 };
 A.newTask = () => openTaskForm({ owner: S.me });
 A.editTask = d => openTaskForm(Object.assign({}, taskById(d.id)));

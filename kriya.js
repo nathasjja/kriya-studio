@@ -5,8 +5,13 @@
 (function () {
   var API = window.KRIYA_API || '';
 
+  var TIMEOUT = 40000; // the app gives up at 30 s; this is the backstop for every page
+
   function call(fn, args) {
+    var ctl = typeof AbortController === 'function' ? new AbortController() : null;
+    var timer = ctl ? setTimeout(function () { ctl.abort(); }, TIMEOUT) : null;
     return fetch(API, {
+      signal: ctl ? ctl.signal : undefined,
       method: 'POST',
       // text/plain keeps this a "simple" request, so the browser sends it straight through
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
@@ -16,12 +21,14 @@
     }).then(function (r) {
       if (!r.ok) throw new Error('The studio sheet did not answer (' + r.status + '). Please try again.');
       return r.json();
-    }, function () {
+    }, function (e) {
+      if (e && e.name === 'AbortError') throw new Error('The studio sheet is taking too long to answer. Please try again.');
       throw new Error("Can't reach the studio right now. Check your connection and try again.");
     }).then(function (j) {
+      if (timer) clearTimeout(timer);
       if (!j || !j.ok) throw new Error((j && j.error) || 'Something went wrong. Please try again.');
       return j.data;
-    });
+    }, function (e) { if (timer) clearTimeout(timer); throw e; });
   }
 
   // Same shape as google.script.run: .withSuccessHandler(f).withFailureHandler(g).api_x(...)
