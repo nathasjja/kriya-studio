@@ -79,6 +79,11 @@ html[data-theme=light] .check input{accent-color:var(--ink)}
 .done .in{max-width:560px;margin:0 auto;padding:28px 16px 64px}
 .done .word,.done h1{color:var(--lime)}
 .done a{color:var(--lime)}
+.grid2>*,.row>*{min-width:0}
+input[type=date].input,input[type=time].input{-webkit-appearance:none;appearance:none;display:block;width:100%;min-width:0;max-width:100%;min-height:48px;text-align:left;line-height:22px}
+input[type=date]::-webkit-date-and-time-value{text-align:left;min-height:22px}
+input[type=date]::-webkit-calendar-picker-indicator{margin-left:auto}
+@media (min-width:900px){.wrap,.hero .in,.done .in{max-width:640px}}
 </style>
 </head>
 <body>

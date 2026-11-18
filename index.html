@@ -241,6 +241,41 @@ a.btn{text-decoration:none}
 .steps span.on{background:var(--on-bg);color:var(--on-fg);border-color:var(--on-bg)}
 nav.tabs .wrap{grid-template-columns:repeat(6,1fr)!important;padding:0 2px}
 nav.tabs button{font-size:10.5px}
+/* delete + two-tap confirm */
+.btn.danger{background:transparent;border-style:dashed;color:var(--muted);font-weight:500}
+.btn.armed,.btn.danger.armed{background:var(--strong-bg);color:var(--strong-fg);border-style:solid;border-color:var(--strong-bg);font-weight:700}
+.btn svg{flex:0 0 auto}
+/* grids never let a child push past its column (the iOS date field did) */
+.grid2>*,.facts>*,.stats>*,.actions>*,.detailgrid>*,.statusgrid>*,.inrow>*{min-width:0}
+input[type=date].input,input[type=time].input{-webkit-appearance:none;appearance:none;display:block;width:100%;min-width:0;max-width:100%;text-align:left;line-height:22px}
+input[type=date]::-webkit-date-and-time-value{text-align:left;min-height:22px}
+input[type=date]::-webkit-calendar-picker-indicator{margin-left:auto}
+select.input{text-overflow:ellipsis;white-space:nowrap;overflow:hidden}
+/* money numbers shrink before they overflow on small phones */
+.stat .n{font-size:clamp(16px,5.2vw,21px);overflow-wrap:anywhere}
+.btn{text-align:center}
+.linkbtn{display:inline-flex;align-items:center}
+.whisper a{display:inline-flex;align-items:center;min-height:44px}
+/* ---------- desktop: sidebar nav, side drawer instead of a bottom sheet ---------- */
+@media (min-width:1000px){
+  :root{--side:224px}
+  .top,main{padding-left:var(--side)}
+  .wrap{max-width:760px}
+  main{padding-bottom:120px}
+  nav.tabs{top:0;bottom:0;right:auto;width:var(--side);border-top:0;border-right:1px solid #2A2C22;padding:80px 0 0}
+  nav.tabs .wrap{display:flex!important;flex-direction:column;height:auto;gap:4px;padding:0 12px!important}
+  nav.tabs button{flex-direction:row;justify-content:flex-start;gap:12px;height:48px;padding:0 14px;border-radius:10px;font-size:14px}
+  nav.tabs button:hover{background:#1C1D17}
+  nav.tabs button[aria-current=page]{background:#1C1D17}
+  nav.tabs .badge{position:static;margin-left:auto}
+  .fab{right:max(24px,calc(50% - 380px + var(--side) / 2));bottom:24px}
+  .toast{left:calc(50% + var(--side) / 2);bottom:28px}
+  .scrim{justify-content:flex-end;align-items:stretch}
+  .sheet{max-width:560px;height:100vh;max-height:100vh;border-radius:20px 0 0 20px;border:1px solid var(--line);border-right:0;padding:0 28px 32px;animation:side .22s ease-out}
+  @keyframes side{from{transform:translateX(32px);opacity:.6}to{transform:none;opacity:1}}
+  .actions{grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+}
+@media (min-width:1000px) and (hover:hover){.btn:hover{border-color:var(--text)}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -296,6 +331,14 @@ function toast(msg, err) {
   document.body.appendChild(t); setTimeout(() => t.remove(), err ? 4200 : 2400);
 }
 
+/** Two-tap confirm in place of a browser dialog: the first tap arms the button for 4 s, the second goes ahead. */
+function armed(el, label) {
+  if (el.dataset.armed === '1') { el.dataset.armed = ''; return true; }
+  const old = el.innerHTML; el.dataset.armed = '1'; el.classList.add('armed'); el.textContent = label; SFX.tap();
+  setTimeout(() => { if (el.isConnected && el.dataset.armed === '1') { el.dataset.armed = ''; el.classList.remove('armed'); el.innerHTML = old; } }, 4000);
+  return false;
+}
+
 /* ---------- sound: tiny synthesized cues, no files ---------- */
 const SFX = (() => {
   let ctx = null;
@@ -349,6 +392,7 @@ applyTheme();
 
 const I = (d, w) => '<svg width="' + (w || 22) + '" height="' + (w || 22) + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + d + '</svg>';
 const ICON = {
+  trash: I('<path d="M4 7h16M9.5 7V4.5h5V7M6.5 7l1 13h9l1-13M10 11v5.5M14 11v5.5"/>'),
   today: I('<circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.8 2.8L16 10"/>'),
   cal: I('<rect x="3" y="4.5" width="18" height="16" rx="2.5"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4"/>'),
   tasks: I('<path d="M10 6h10M10 12h10M10 18h10"/><path d="M3.5 6l1.3 1.3L7.3 4.8M3.5 12l1.3 1.3 2.5-2.5M3.5 18l1.3 1.3 2.5-2.5"/>'),
@@ -376,9 +420,11 @@ function newRequests() { return ((S.data && S.data.requests) || []).filter(r => 
 function attention() { return newRequests() + (S.data && S.data.quotes ? S.data.quotes.filter(q => (q.status === 'Offer received' || q.status === 'Accepted') && !q.expired && !q.bookingId).length : 0); }
 function setData(d) {
   const before = S.data ? attention() : null;
-  S.data = d;
-  try { ls('kriya_data', JSON.stringify(d)); } catch (e) { }
-  if (!S.day) S.day = d.today; if (!S.month) S.month = d.today.slice(0, 7);
+  // saves answer with only the lists they touched ({partial:true, tasks}); merge those, keep the rest
+  if (d && d.partial && S.data) { Object.keys(d).forEach(k => { if (k !== 'partial' && k !== 'at') S.data[k] = d[k]; }); }
+  else S.data = d;
+  saveCache();
+  if (!S.day) S.day = S.data.today; if (!S.month) S.month = S.data.today.slice(0, 7);
   S.lastRefresh = Date.now();
   const after = attention();
   if (before !== null && after > before) { SFX.ping(); toast(after - before === 1 ? 'New request or client reply' : (after - before) + ' new requests or client replies'); }
@@ -629,7 +675,8 @@ A.openTask = d => {
   if (t.desc) h += '<div class="label">description</div><p class="desc">' + esc(t.desc) + '</p>';
   h += '<h3>Updates</h3>' + (parseNotes(t.notes).map(n => '<div class="upd"><span class="label">' + esc(n.when) + '</span><span>' + esc(n.text) + '</span></div>').join('') || '<p class="muted">No updates yet.</p>');
   h += '<label class="label" for="tNote" style="display:block;margin-top:12px">add an update</label><div class="inrow"><input id="tNote" class="input" placeholder="what changed?"><button class="btn primary" data-a="taskNote" data-id="' + esc(t.id) + '">Post</button></div>';
-  h += '<button class="btn wide" style="margin-top:14px" data-a="editTask" data-id="' + esc(t.id) + '">Edit task</button>';
+  h += '<div class="actions" style="margin-top:18px"><button class="btn" data-a="editTask" data-id="' + esc(t.id) + '">Edit task</button>' +
+    '<button class="btn danger" data-a="delTask" data-id="' + esc(t.id) + '"' + (sv ? ' disabled' : '') + '>' + ICON.trash + 'Delete task</button></div>';
   sheet(t.id, h);
 };
 A.taskStatus = async d => {
@@ -679,6 +726,14 @@ A.taskNote = async d => {
   S.pending++;
   try { setData(await run('api_addTaskNote', S.code, d.id, text, S.me)); S.pending--; SFX.tick(); render(); if (sheetIs(d.id)) A.openTask({ id: d.id }); toast('Update posted'); }
   catch (e) { S.pending--; inp.disabled = false; toast(e.message, true); }
+};
+A.delTask = async (d, el) => {
+  if (!armed(el, 'Tap again to delete')) return;
+  const list = S.data.tasks || [], i = list.findIndex(t => t.id === d.id); if (i < 0) return;
+  const gone = list.splice(i, 1)[0];
+  S.pending++; A.closeSheet(); render(); SFX.status(); toast('Deleted ' + d.id);
+  try { setData(await run('api_deleteTask', S.code, d.id, S.me)); S.pending--; render(); }
+  catch (e) { S.pending--; if (!taskById(d.id)) list.splice(i, 0, gone); render(); toast(e.message, true); }
 };
 A.newTask = () => openTaskForm({ owner: S.me });
 A.editTask = d => openTaskForm(Object.assign({}, taskById(d.id)));
@@ -784,6 +839,9 @@ A.openBooking = d => {
     '<button class="btn wide" data-a="saveNotes" data-id="' + esc(b.id) + '">Save notes</button>';
   h += '<h3>References</h3><div id="refs" class="thumbs"></div><label class="btn wide" style="margin-top:6px">' + ICON.cam + 'Add photo<input type="file" accept="image/*" multiple class="sr" id="addPhoto"></label>';
   if (b.updated) h += '<p class="muted" style="font-size:13px;margin-top:16px">Last change ' + esc(b.updated) + '</p>';
+  const lockedDone = statusKind(b.status) === 'done' && !isOwnerMe();
+  h += '<button class="btn danger wide" style="margin-top:18px" data-a="delBooking" data-id="' + esc(b.id) + '"' + (lockedDone ? ' disabled' : '') + '>' + ICON.trash + 'Delete booking</button>' +
+    '<p class="whisper center">' + (lockedDone ? 'completed sessions count toward money. only the owner can delete one.' : 'to keep a record, set the status to cancelled instead.') + '</p>';
   sheet(b.client, h, el => {
     loadRefs(b.folder, el.querySelector('#refs'));
     el.querySelector('#addPhoto').onchange = async e => {
@@ -808,11 +866,24 @@ async function loadRefs(folder, box) {
   } catch (e) { box.innerHTML = '<div class="muted" style="font-size:13px">Could not load</div>'; }
 }
 A.setField = async d => {
-  const btns = document.querySelectorAll('[data-f="' + d.f + '"]'); btns.forEach(b => b.setAttribute('aria-pressed', b.dataset.v === d.v));
-  try { setData(await run('api_setBookingField', S.code, d.id, d.f, d.v, S.me)); SFX.status(); render(); toast(d.v); }
-  catch (e) { toast(e.message, true); }
+  const b = bookings().find(x => x.id === d.id); if (!b || b[d.f] === d.v) return;
+  const prev = b[d.f];
+  const mark = v => document.querySelectorAll('#layer [data-f="' + d.f + '"]').forEach(x => x.setAttribute('aria-pressed', x.dataset.v === v));
+  // show it at once; the sheet catches up in the background
+  b[d.f] = d.v; mark(d.v); SFX.status(); render(); S.pending++;
+  try { setData(await run('api_setBookingField', S.code, d.id, d.f, d.v, S.me)); S.pending--; render(); toast('Saved · ' + d.v.toLowerCase()); }
+  catch (e) { S.pending--; b[d.f] = prev; mark(prev); render(); toast(e.message, true); }
+};
+A.delBooking = async (d, el) => {
+  if (!armed(el, 'Tap again to delete')) return;
+  const list = S.data.bookings || [], i = list.findIndex(b => b.id === d.id); if (i < 0) return;
+  const gone = list.splice(i, 1)[0];
+  S.pending++; A.closeSheet(); render(); SFX.status(); toast('Deleted ' + d.id);
+  try { setData(await run('api_deleteBooking', S.code, d.id, S.me)); S.pending--; render(); }
+  catch (e) { S.pending--; if (!bookings().find(b => b.id === d.id)) list.splice(i, 0, gone); render(); toast(e.message, true); }
 };
 A.saveNotes = async d => {
+  toast('Saving…');
   try { setData(await run('api_setBookingField', S.code, d.id, 'notes', document.getElementById('bNotes').value, S.me)); render(); toast('Notes saved'); }
   catch (e) { toast(e.message, true); }
 };
@@ -1042,9 +1113,9 @@ function openCalc(c) {
     '<div class="field" style="margin-top:14px"><label class="label" for="qPrice">your quote (rp)</label><input id="qPrice" class="input mono qprice" inputmode="numeric">' +
     '<span class="label" id="qNote" style="display:block;margin-top:6px"></span></div>' +
     '<dl class="facts"><div><dt>deposit to hold the date</dt><dd class="mono">' + rp(p.deposit) + '</dd></div><div><dt>link valid for</dt><dd class="mono">' + (p.validDays || 7) + ' days</dd></div></dl>' +
-    '<button class="btn primary wide" id="qSave" data-a="saveQuote">' + (c.quoteId ? (c.offer ? 'Send counter-offer' : 'Update and resend') : 'Save and send quote') + '</button>' +
+    '<button class="btn primary wide" id="qSave" data-a="saveQuote">' + (c.quoteId ? (c.offer ? 'Send a new quote link' : 'Update and resend') : 'Save and send quote') + '</button>' +
     '<p class="whisper center">saved to the quotes tab. the client gets a link to accept or suggest a price.</p>';
-  sheet(c.quoteId ? (c.offer ? 'Counter ' : 'Edit ') + c.quoteId : 'New quote', h, el => {
+  sheet(c.quoteId ? (c.offer ? 'Requote ' : 'Edit ') + c.quoteId : 'New quote', h, el => {
     el.querySelector('#qLen').oninput = e => { S.calc.len = Number(e.target.value); drawCalc(true); };
     const qp = el.querySelector('#qPrice');
     qp.oninput = e => { S.calc.quote = digits(e.target.value); drawQuoteNote(); };
@@ -1118,14 +1189,47 @@ A.copyLink = async () => {
   try { await navigator.clipboard.writeText(i.value); toast('Link copied'); }
   catch (e) { try { document.execCommand('copy') ? toast('Link copied') : toast('Press and hold the link to copy it', true); } catch (er) { toast('Press and hold the link to copy it', true); } }
 };
-A.quoteDecision = async d => {
-  if (d.act === 'decline' && !confirm('Decline this offer? The client sees that the studio could not do that price.')) return;
+A.quoteDecision = async (d, el) => {
+  if (d.act === 'decline' && !armed(el, 'Tap again to decline')) return;
   try {
     setData(await run('api_quoteDecision', S.code, d.id, d.act, S.me));
     d.act === 'acceptOffer' ? SFX.allDone() : SFX.status();
     render(); const q = quoteById(d.id); if (q && q.requestId) A.openRequest({ id: q.requestId }); else if (q) A.openQuote({ id: q.id });
     toast(d.act === 'acceptOffer' ? 'Offer accepted' : 'Declined');
   } catch (e) { toast(e.message, true); }
+};
+/* New price: the studio settles it with the client directly and records it. The quote becomes Accepted at that price,
+   ready to book, so nobody sends links back and forth. */
+A.newPrice = d => {
+  const q = quoteById(d.id); if (!q) return;
+  const p = PR(), r50 = n => Math.round(n / 50000) * 50000;
+  const start = Math.max(p.rate, q.offer ? r50((q.offer + q.quoted) / 2) : q.quoted);
+  const h = '<p class="sub" style="margin:-4px 0 14px">' + esc(q.client) + ' · your quote ' + rp(q.quoted) + (q.offer ? ' · they offered ' + rp(q.offer) : '') + '</p>' +
+    '<div class="field"><label class="label" for="npPrice">price you agreed (rp)</label><input id="npPrice" class="input mono qprice" inputmode="numeric" value="' + dots(start) + '">' +
+    '<span class="label" id="npRule" style="display:block;margin-top:6px"></span></div>' +
+    '<div class="field"><label class="label" for="npWhy">note · optional</label><input id="npWhy" class="input" placeholder="e.g. agreed on WhatsApp, smaller size"></div>' +
+    '<button class="btn primary wide" id="npSave" data-a="saveNewPrice" data-id="' + esc(q.id) + '">Set new price</button>' +
+    '<p class="whisper center">no link to send. the quote is marked accepted at this price, ready to book. if they open their old link they see the new price.</p>';
+  sheet('New price', h, el => {
+    const inp = el.querySelector('#npPrice'), rule = el.querySelector('#npRule'), btn = el.querySelector('#npSave');
+    const check = () => {
+      const v = digits(inp.value), under = v < p.rate, low = v < q.low && !isOwnerMe();
+      rule.textContent = !v ? 'enter the price' : under ? 'below the ' + rp(p.rate) + ' session minimum' : v < q.low ? (isOwnerMe() ? 'below the low end · your call as owner' : 'below the ' + rp(q.low) + ' low end · only the owner can set this') : 'estimate ' + rp(q.low) + ' – ' + dots(q.high);
+      inp.classList.toggle('warn', !v || under || low); btn.disabled = !v || under || low;
+    };
+    inp.oninput = check; inp.onblur = () => { inp.value = dots(digits(inp.value)); }; check();
+    setTimeout(() => { inp.focus(); inp.select(); }, 60);
+  });
+};
+A.saveNewPrice = async (d, el) => {
+  const price = digits((document.getElementById('npPrice') || {}).value), why = ((document.getElementById('npWhy') || {}).value || '').trim();
+  el.disabled = true; el.innerHTML = '<span class="spin"></span>Saving';
+  try {
+    setData(await run('api_quoteDecision', S.code, d.id, 'newPrice', S.me, price, why));
+    SFX.allDone(); render();
+    const q = quoteById(d.id); if (q && q.requestId) A.openRequest({ id: q.requestId }); else if (q) A.openQuote({ id: q.id }); else A.closeSheet();
+    toast('Accepted at ' + rp(price));
+  } catch (e) { el.disabled = false; el.textContent = 'Set new price'; toast(e.message, true); }
 };
 A.bookQuote = d => {
   const q = quoteById(d.id); if (!q) return;
@@ -1168,7 +1272,8 @@ function quoteActions(q, reqId) {
       (underMin ? '<span class="label calm-hi">below the ' + esc(rp(PR().rate)) + ' session minimum · counter or decline</span>'
         : low ? '<span class="label calm-hi">below the low end · ' + (isOwnerMe() ? 'your call as owner' : 'only the owner can accept') + '</span>' : '') + '</div>' +
       '<div class="actions">' + (underMin ? '' : '<button class="btn primary wide" data-a="quoteDecision" data-act="acceptOffer" data-id="' + esc(q.id) + '"' + (low && !isOwnerMe() ? ' disabled' : '') + '>Accept ' + esc(rp(q.offer)) + '</button>') +
-      '<button class="btn" data-a="editQuote" data-id="' + esc(q.id) + '">Counter</button><button class="btn" data-a="quoteDecision" data-act="decline" data-id="' + esc(q.id) + '">Decline</button></div>';
+      '<button class="btn" data-a="newPrice" data-id="' + esc(q.id) + '">New price</button><button class="btn" data-a="quoteDecision" data-act="decline" data-id="' + esc(q.id) + '">Decline</button></div>' +
+      '<p class="whisper">new price: settle it with them in chat, set it here. no new link.</p>';
   } else if (q.status === 'Accepted') {
     h += '<div class="calm"><span class="label calm-hi">accepted</span><div class="bignum calm-hi">' + rp(q.agreed || q.quoted) + '</div>' +
       '<span class="label calm-mut">' + (q.prefDate ? 'prefers ' + esc(q.prefDate) : 'no date preference yet') + '</span>' + (q.clientNote ? '<p style="margin:0">“' + esc(q.clientNote) + '”</p>' : '') + '</div>' +
@@ -1180,7 +1285,8 @@ function quoteActions(q, reqId) {
     h += '<div class="calm"><span class="label calm-hi">' + (q.expired ? 'expired ' : 'sent · valid until ') + esc(nice(q.validUntil, { day: 'numeric', month: 'short' })) + '</span><div class="bignum calm-hi">' + rp(q.quoted) + '</div>' +
       '<span class="label calm-mut">' + esc(q.detail) + ' · ' + esc(String(q.len)) + ' cm' + (q.pieces > 1 ? ' × ' + q.pieces : '') + ' · waiting for the client</span></div>' +
       '<div class="actions">' + (wa && q.link ? '<a class="btn" target="_blank" rel="noopener" href="https://wa.me/' + wa + '?text=' + encodeURIComponent(waQuoteText(first, q.piece, q.link)) + '">' + ICON.wa + 'Resend</a>' : '') +
-      '<button class="btn" data-a="editQuote" data-id="' + esc(q.id) + '">' + (q.expired ? 'Renew' : 'Edit') + '</button></div>';
+      '<button class="btn" data-a="editQuote" data-id="' + esc(q.id) + '">' + (q.expired ? 'Renew' : 'Edit') + '</button>' +
+      '<button class="btn wide" data-a="newPrice" data-id="' + esc(q.id) + '">Agreed a price in chat</button></div>';
   }
   if (q.log) h += '<details class="qlog"><summary class="label">history</summary>' + String(q.log).split('\n').slice(0, 8).map(l => '<div class="mono">' + esc(l) + '</div>').join('') + '</details>';
   return h;

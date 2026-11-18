@@ -66,6 +66,11 @@ html[data-theme=dark] input[type=date]{color-scheme:dark}
 .err{background:var(--lime);color:var(--ink);border:2px solid var(--ink);border-radius:12px;padding:12px 14px;font-weight:600}
 .spin{width:18px;height:18px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:s .8s linear infinite;display:inline-block}
 @keyframes s{to{transform:rotate(360deg)}}
+.grid2>*,.row>*{min-width:0}
+input[type=date].input,input[type=time].input{-webkit-appearance:none;appearance:none;display:block;width:100%;min-width:0;max-width:100%;min-height:48px;text-align:left;line-height:22px}
+input[type=date]::-webkit-date-and-time-value{text-align:left;min-height:22px}
+input[type=date]::-webkit-calendar-picker-indicator{margin-left:auto}
+@media (min-width:900px){.wrap,.hero .in,.done .in{max-width:640px}}
 </style>
 </head>
 <body>
