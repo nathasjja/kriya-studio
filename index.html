@@ -256,6 +256,68 @@ select.input{text-overflow:ellipsis;white-space:nowrap;overflow:hidden}
 .btn{text-align:center}
 .linkbtn{display:inline-flex;align-items:center}
 .whisper a{display:inline-flex;align-items:center;min-height:44px}
+/* ---------- depth + rhythm: one elevation scale, 8-pt spacing, fewer outlines ---------- */
+:root{--surface:#1B1C16;--surface2:#26281F;--sheet:#15160F;--line:#2A2C23;
+  --e1:inset 0 1px 0 rgba(243,240,232,.05),0 1px 2px rgba(0,0,0,.35),0 4px 14px rgba(0,0,0,.18);--e2:0 -16px 48px rgba(0,0,0,.5)}
+html[data-theme=light]{--surface:#FCFBF7;--surface2:#E8E4D8;--sheet:#F3F0E8;
+  --e1:0 1px 2px rgba(18,19,14,.06),0 6px 18px rgba(18,19,14,.06);--e2:0 -16px 48px rgba(18,19,14,.18)}
+main{padding-top:24px}
+h1,.pagetitle{margin:4px 0 20px}
+.hello{margin-bottom:20px}
+h2{margin:28px 0 16px}
+h3{font-size:21px;margin:40px 0 14px}
+.sechead{margin:40px 0 14px}
+.card{border-color:transparent;box-shadow:var(--e1);border-radius:16px;padding:16px 18px;margin-bottom:12px;transition:transform .12s,background .12s}
+.card:active{transform:scale(.985)}
+.check{border-color:transparent;box-shadow:var(--e1);border-radius:14px;padding:12px 16px}
+.check.on{box-shadow:none}
+.days{gap:8px;padding:2px 2px 14px;margin:0 -2px}
+.day{border-color:transparent;box-shadow:var(--e1);border-radius:14px;height:78px}
+.segbar{border-color:transparent;background:var(--sunk);margin-bottom:20px}
+.seg{gap:8px;margin:0 0 20px}
+.seg button{border-color:transparent;background:var(--surface2)}
+.pills{gap:8px;margin-top:12px}
+.pill{border-color:transparent;background:var(--surface2);padding:4px 9px}
+.pill.plain{background:transparent}
+.meta{font:400 13px/1.4 'DM Mono',monospace;color:var(--muted);text-transform:lowercase;margin-top:8px}
+.meta .hi{color:var(--hi)}
+.metarow{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:10px}
+.metarow .meta{margin:0;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.metarow .pill{flex:0 0 auto}
+.time{font-size:17px;display:flex;flex-direction:column;gap:4px}
+.time small{font:400 12px 'DM Mono',monospace;color:var(--muted)}
+.card .row>.pill{align-self:flex-start;margin-top:2px}
+.btn{border-color:transparent;background:var(--surface2)}
+.btn.danger{border-color:var(--line2)}
+.actions{gap:10px;margin:20px 0}
+.statusgrid button,.detailgrid button{border-color:transparent;background:var(--surface2)}
+.facts div{border-color:transparent;box-shadow:var(--e1)}
+.stats{gap:12px}
+.stat{padding:16px}
+.calm,.callout,.note{border-radius:16px}
+.callout{padding:14px 16px;margin:16px 0}
+.empty{border-radius:16px;padding:32px 16px}
+.scrim{background:rgba(0,0,0,.66)}
+html[data-theme=light] .scrim{background:rgba(18,19,14,.45)}
+.sheet{background:var(--sheet);border:0;box-shadow:var(--e2);padding:0 20px calc(32px + env(safe-area-inset-bottom))}
+.sheet::before{content:'';display:block;width:40px;height:4px;border-radius:2px;background:var(--line2);margin:10px auto 0}
+.sheet .head{background:var(--sheet);border-bottom:1px solid var(--line);padding:14px 0 16px;margin-bottom:20px}
+.sheet .field{margin-bottom:18px}
+.sheet .label+.seg{margin-top:10px}
+/* booking detail: summary, then grouped blocks */
+.hero{margin:0 0 4px}
+.hero .when{font-weight:700;font-size:24px;line-height:1.15}
+.hero .meta{margin-top:8px;font-size:14px}
+.glabel{display:block;margin:28px 0 10px}
+.panel{background:var(--surface);border-radius:16px;padding:4px 18px;margin:0 0 12px;box-shadow:var(--e1)}
+.rows{margin:0}
+.rows>div{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:14px 0;border-bottom:1px solid var(--line)}
+.rows>div:last-child{border-bottom:0}
+.rows dt{font:400 12px 'DM Mono',monospace;text-transform:lowercase;color:var(--muted);flex:0 0 auto}
+.rows dd{margin:0;text-align:right;min-width:0;overflow-wrap:anywhere}
+.rows dd .muted{display:block;font-size:12px;margin-top:2px}
+.sheet .kv{background:var(--surface);border-radius:16px;padding:16px 18px;box-shadow:var(--e1);gap:14px 14px;margin:0 0 16px}
+@media (min-width:1000px){.sheet{padding:0 32px 40px}.sheet::before{display:none}}
 /* ---------- desktop: sidebar nav, side drawer instead of a bottom sheet ---------- */
 @media (min-width:1000px){
   :root{--side:224px}
@@ -268,7 +330,7 @@ select.input{text-overflow:ellipsis;white-space:nowrap;overflow:hidden}
   nav.tabs button:hover{background:#1C1D17}
   nav.tabs button[aria-current=page]{background:#1C1D17}
   nav.tabs .badge{position:static;margin-left:auto}
-  .fab{right:max(24px,calc(50% - 380px + var(--side) / 2));bottom:24px}
+  .fab{right:32px;bottom:32px}
   .toast{left:calc(50% + var(--side) / 2);bottom:28px}
   .scrim{justify-content:flex-end;align-items:stretch}
   .sheet{max-width:560px;height:100vh;max-height:100vh;border-radius:20px 0 0 20px;border:1px solid var(--line);border-right:0;padding:0 28px 32px;animation:side .22s ease-out}
@@ -619,7 +681,7 @@ function taskById(id) { return (S.data.tasks || []).find(t => t.id === id); }
 function taskCard(t) {
   const pk = prioKind(t.prio), tk = taskKind(t.status), du = dueInfo(t), notes = parseNotes(t.notes);
   return '<button class="card task' + (tk === 'done' ? ' isdone' : '') + '" data-a="openTask" data-id="' + esc(t.id) + '"><div class="pills" style="margin:0 0 8px">' +
-    '<span class="pill idchip">' + esc(t.id) + '</span>' + (t.prio ? '<span class="pill prio-' + pk + '">' + esc(t.prio.toLowerCase()) + '</span>' : '') +
+    '<span class="pill plain mono">' + esc(t.id) + '</span>' + (t.prio ? '<span class="pill prio-' + pk + '">' + esc(t.prio.toLowerCase()) + '</span>' : '') +
     '<span class="pill plain">' + esc((t.status || '').toLowerCase()) + '</span><span class="pill due-' + (du.kind || 'none') + '" style="margin-left:auto">' + esc(du.label) + '</span></div>' +
     '<span class="title tt">' + esc(t.title) + '</span>' +
     (tk === 'blocked' && t.blocker ? '<span class="blockline"><span class="mono calm-hi">blocked · </span>' + esc(t.blocker) + '</span>' : '') +
@@ -765,12 +827,12 @@ A.saveTask = async d => {
 function bookingCard(b) {
   const sk = statusKind(b.status), pk = payKind(b.payment), soon = b.date >= today() && daysSince(b.date) >= -3;
   const c = clientFor(b);
-  return '<button class="card" data-a="openBooking" data-id="' + esc(b.id) + '"><div class="row"><div class="time">' + esc(b.start || '—') + '</div>' +
-    '<div style="flex:1"><div class="title">' + esc(b.client) + '</div><div class="sub">' + esc(b.placement || 'No placement yet') + '</div>' +
-    '<div class="pills"><span class="pill">' + (b.hours || 0) + 'h' + (b.artist ? ' · ' + esc(b.artist.split(' ')[0]) : '') + '</span>' +
-    '<span class="pill ' + (sk === 'done' ? 'ok' : sk === 'cancelled' ? 'off' : sk === 'noshow' ? 'warn' : '') + '">' + esc(b.status || '—') + '</span>' +
-    '<span class="pill ' + (pk === 'paid' ? 'ok' : pk === 'unpaid' && soon && sk === 'active' ? 'warn' : '') + '">' + esc(b.payment || 'Unpaid') + '</span>' +
-    (c && c.sens ? '<span class="pill warn">Notes</span>' : '') + '</div></div></div></button>';
+  // one signal per card: the status when it isn't a normal booking, otherwise the money
+  const sig = sk !== 'active' ? '<span class="pill ' + (sk === 'done' ? 'ok' : sk === 'cancelled' ? 'off' : 'warn') + '">' + esc((b.status || '').toLowerCase()) + '</span>'
+    : '<span class="pill ' + (pk === 'paid' ? 'ok' : pk === 'unpaid' && soon ? 'warn' : '') + '">' + esc((b.payment || 'Unpaid').toLowerCase()) + '</span>';
+  return '<button class="card" data-a="openBooking" data-id="' + esc(b.id) + '"><div class="row"><div class="time">' + esc(b.start || '—') + '<small>' + (b.hours || 0) + 'h</small></div>' +
+    '<div style="flex:1;min-width:0"><div class="title">' + esc(b.client) + '</div><div class="sub">' + esc(b.placement || 'No placement yet') + '</div>' +
+    '<div class="metarow"><span class="meta">' + (c && c.sens ? '<span class="hi">has notes</span> · ' : '') + esc(b.artist ? b.artist.split(' ')[0] : 'no artist yet') + '</span>' + sig + '</div></div></div></button>';
 }
 function viewSchedule() {
   const all = bookings(), t = today();
@@ -825,17 +887,19 @@ A.openBooking = d => {
   const c = clientFor(b), L = S.data.lists;
   const chips = (field, list, cur) => '<div class="seg" role="group" aria-label="' + field + '">' + list.map(v =>
     '<button data-a="setField" data-id="' + esc(b.id) + '" data-f="' + field + '" data-v="' + esc(v) + '" aria-pressed="' + (v === cur) + '">' + esc(v) + '</button>').join('') + '</div>';
-  let h = '<dl class="kv"><dt>When</dt><dd>' + nice(b.date, { weekday: 'long', day: 'numeric', month: 'long' }) + (b.start ? ' · ' + esc(b.start) : '') + ' · ' + (b.hours || 0) + 'h</dd>' +
-    '<dt>Artist</dt><dd>' + esc(b.artist || '—') + '</dd><dt>Sales rep</dt><dd>' + esc(b.rep || '—') + '</dd>' +
-    '<dt>Placement</dt><dd>' + esc(b.placement || '—') + '</dd>' +
-    '<dt>Value</dt><dd class="mono">' + rp(b.value) + ' <span class="muted">· comm. ' + rp(b.commission) + '</span></dd>' +
-    '<dt>Deposit</dt><dd class="mono">' + rp(b.deposit) + '</dd><dt>Booking</dt><dd class="mono muted">' + esc(b.id) + '</dd></dl>';
+  let h = '<div class="hero"><div class="when">' + nice(b.date, { weekday: 'long', day: 'numeric', month: 'long' }) + (b.start ? ' · ' + esc(b.start) : '') + '</div>' +
+    '<div class="meta">' + (b.hours || 0) + 'h · ' + esc(b.artist || 'no artist yet') + ' · ' + esc(b.placement || 'no placement yet') + '</div></div>';
   if (c && c.sens) h += '<div class="callout"><div class="label">Sensitivities & placement</div><div style="margin-top:6px">' + esc(c.sens) + '</div></div>';
   h += '<div class="actions">' + contactButtons(b.phone || (c && c.phone), b.handle || (c && c.handle), '', confirmText(b)) +
-    '<button class="btn" data-a="editBooking" data-id="' + esc(b.id) + '">Edit booking</button></div>';
-  h += '<div class="label">Status</div>' + chips('status', L.status, b.status);
-  h += '<div class="label">Payment</div>' + chips('payment', L.payment, b.payment);
-  h += '<div class="field"><label class="label" for="bNotes">Notes</label><textarea id="bNotes" class="input">' + esc(b.notes) + '</textarea></div>' +
+    '<button class="btn wide" data-a="editBooking" data-id="' + esc(b.id) + '">Edit booking</button></div>';
+  h += '<span class="label glabel">Status</span>' + chips('status', L.status, b.status);
+  h += '<span class="label glabel" style="margin-top:8px">Payment</span>' + chips('payment', L.payment, b.payment);
+  h += '<span class="label glabel">Details</span><div class="panel"><dl class="rows">' +
+    '<div><dt>Value</dt><dd class="mono">' + rp(b.value) + '<span class="muted">comm. ' + rp(b.commission) + '</span></dd></div>' +
+    '<div><dt>Deposit</dt><dd class="mono">' + rp(b.deposit) + '</dd></div>' +
+    '<div><dt>Sales rep</dt><dd>' + esc(b.rep || '—') + '</dd></div>' +
+    '<div><dt>Booking</dt><dd class="mono muted">' + esc(b.id) + '</dd></div></dl></div>';
+  h += '<div class="field" style="margin-top:28px"><label class="label" for="bNotes">Notes</label><textarea id="bNotes" class="input">' + esc(b.notes) + '</textarea></div>' +
     '<button class="btn wide" data-a="saveNotes" data-id="' + esc(b.id) + '">Save notes</button>';
   h += '<h3>References</h3><div id="refs" class="thumbs"></div><label class="btn wide" style="margin-top:6px">' + ICON.cam + 'Add photo<input type="file" accept="image/*" multiple class="sr" id="addPhoto"></label>';
   if (b.updated) h += '<p class="muted" style="font-size:13px;margin-top:16px">Last change ' + esc(b.updated) + '</p>';
@@ -1021,8 +1085,8 @@ function viewRequests() {
     '<button data-a="reqFilter" data-k="' + k + '" aria-pressed="' + (f === k) + '">' + k + (k !== 'All' ? ' <span class="mono">' + n(k) + '</span>' : '') + '</button>').join('') + '</div>';
   h += list.length ? list.map(r => '<button class="card" data-a="openRequest" data-id="' + esc(r.id) + '"><div class="row"><div style="flex:1"><div class="title">' + esc(r.name) + '</div>' +
     '<div class="sub">' + esc(String(r.idea).slice(0, 110)) + (String(r.idea).length > 110 ? '…' : '') + '</div>' +
-    '<div class="pills">' + [r.placement, r.size, r.style].filter(Boolean).map(x => '<span class="pill">' + esc(x) + '</span>').join('') +
-    (r.folder ? '<span class="pill ok">Refs</span>' : '') + quotePill(r) + '</div></div><span class="label">' + esc(String(r.received).slice(5, 10)) + '</span></div></button>').join('')
+    '<div class="meta">' + [r.placement, r.size, r.style].filter(Boolean).map(esc).join(' · ') + '</div>' +
+    ((r.folder || quotePill(r)) ? '<div class="pills">' + (r.folder ? '<span class="pill ok">refs</span>' : '') + quotePill(r) + '</div>' : '') + '</div><span class="label">' + esc(String(r.received).slice(5, 10)) + '</span></div></button>').join('')
     : '<div class="empty">no ' + (f === 'All' ? '' : f.toLowerCase() + ' ') + 'requests.<br>request link goes in your bio.</div>';
   return h;
 }
@@ -1333,7 +1397,7 @@ function viewQuote() {
       const pill = q.expired ? '<span class="pill off">expired</span>' : q.status === 'Offer received' ? '<span class="pill warn">offer ' + esc(rp(q.offer)) + '</span>'
         : q.status === 'Accepted' ? '<span class="pill ok">accepted · book it</span>' : '<span class="pill">waiting</span>';
       return '<button class="card" data-a="openQuote" data-id="' + esc(q.id) + '"><div class="row"><div style="flex:1;min-width:0"><div class="title">' + esc(q.client) + '</div>' +
-        '<div class="sub">' + esc(q.piece) + '</div><div class="pills">' + pill + '<span class="pill idchip">' + esc(q.id) + '</span></div></div>' +
+        '<div class="sub">' + esc(q.piece) + '</div><div class="pills">' + pill + '<span class="pill plain">' + esc(q.id) + '</span></div></div>' +
         '<span class="mono" style="font-size:14px">' + rp(q.agreed || q.quoted) + '</span></div></button>';
     }).join('');
   }
